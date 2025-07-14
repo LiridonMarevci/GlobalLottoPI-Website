@@ -2,19 +2,17 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Global Lotto PI</title>
   <style>
     body, html {
       margin: 0;
       padding: 0;
       height: 100%;
-      font-family: 'Segoe UI', sans-serif;
+      font-family: Arial, sans-serif;
     }
 
-    /* Hintergrund fixieren */
-    body::before {
-      content: "";
+    .background {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
       background: url('background.png') no-repeat center center fixed;
@@ -26,55 +24,53 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 15px;
-      background-color: rgba(123, 44, 191, 0.9);
+      background-color: #7b2cbf;
+      padding: 15px 20px;
+      gap: 12px;
     }
 
     header img {
-      height: 60px;
+      height: 45px;
       width: auto;
-      margin-right: 15px;
     }
 
     header h1 {
       color: gold;
-      font-size: 32px;
+      font-weight: 900;
+      font-size: 30px;
       margin: 0;
-      font-weight: bold;
-      text-shadow: 1px 1px 2px #000;
     }
 
     main {
       max-width: 500px;
       margin: 50px auto;
-      background-color: rgba(255, 255, 255, 0.95);
-      padding: 30px;
+      background: rgba(255, 255, 255, 0.96);
       border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      padding: 25px 30px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
     }
 
     label {
-      font-weight: bold;
       display: block;
-      margin-top: 15px;
-      margin-bottom: 5px;
+      margin-top: 20px;
+      font-weight: bold;
     }
 
     select, button {
       width: 100%;
-      padding: 12px;
-      font-size: 16px;
+      padding: 10px 12px;
+      margin-top: 6px;
+      font-size: 15px;
       border-radius: 8px;
-      border: 1px solid #ccc;
-      margin-bottom: 15px;
+      border: 1px solid #aaa;
     }
 
     button {
       background-color: #7b2cbf;
       color: white;
-      border: none;
       font-weight: bold;
-      transition: background 0.3s;
+      cursor: pointer;
+      margin-top: 25px;
     }
 
     button:hover {
@@ -82,48 +78,148 @@
     }
 
     .warning {
-      text-align: center;
       color: darkred;
-      font-weight: bold;
+      text-align: center;
       margin-top: 20px;
+      font-weight: bold;
+    }
+
+    .select-group {
+      display: none;
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <img src="logo.png" alt="Global Lotto PI Logo" />
-    <h1>GLOBAL LOTTO PI</h1>
-  </header>
+<div class="background"></div>
 
-  <main>
-    <label for="languageSelect">Select language:</label>
-    <select id="languageSelect">
-      <option value="en" selected>English</option>
-      <option value="de">German</option>
-      <option value="fr">French</option>
-      <option value="es">Spanish</option>
-    </select>
+<header>
+  <img src="logo.png" alt="Global Lotto PI Logo" />
+  <h1>GLOBAL LOTTO PI</h1>
+</header>
 
-    <label for="lottoSelect">Choose lotto type:</label>
-    <select id="lottoSelect">
-      <option value="global" selected>Global Lotto</option>
-      <option value="continent">Continent Lotto</option>
-      <option value="country">Country Lotto</option>
-    </select>
+<main>
+  <label for="languageSelect">Select language:</label>
+  <select id="languageSelect">
+    <!-- Languages will be inserted via JS -->
+  </select>
 
-    <button onclick="goToJoin()">Join now</button>
+  <label for="ticketType">Choose lotto type:</label>
+  <select id="ticketType">
+    <option value="global" selected>Global Lotto</option>
+    <option value="continent">Continent Lotto</option>
+    <option value="country">Country Lotto</option>
+  </select>
 
-    <div class="warning">
-      ⚠️ Never enter your 24-word passphrase here! Use only the official Pi Browser Wallet.
-    </div>
-  </main>
+  <div class="select-group" id="continentGroup">
+    <label for="continentSelect">Select continent:</label>
+    <select id="continentSelect"></select>
+  </div>
 
-  <script>
-    function goToJoin() {
-      window.location.href = "join.html";
+  <div class="select-group" id="countryGroup">
+    <label for="countrySelect">Select country:</label>
+    <select id="countrySelect"></select>
+  </div>
+
+  <button id="joinBtn">Join now</button>
+
+  <div class="warning">
+    ⚠️ Never enter your 24-word passphrase here! Use only the official Pi Browser Wallet.
+  </div>
+</main>
+
+<script>
+  const languageList = [
+    "Abchasisch", "Achinesisch", "Adygisch", "Afar", "Afrikaans", "Ainu", "Akan", "Albanisch",
+    "Aleutisch", "Altenglisch", "Altfranzösisch", "Altgriechisch", "Althebräisch", "Altisländisch",
+    "Altkirchenslawisch", "Altpersisch", "Altprovenzalisch", "Alttürkisch", "Amharisch", "Angika",
+    "Aragonisch", "Aramäisch", "Arapaho", "Armenisch", "Aserbaidschanisch", "Assamesisch", "Asturisch",
+    "Avarisch", "Awadhi", "Aymara", "Azeri", "Azeri (Latein)", "Azeri (Arabisch)", "Balinesisch",
+    "Bambara", "Baskisch", "Bavarian", "Belutschisch", "Bengalisch", "Bhojpuri", "Bislama", "Bosnisch",
+    "Bretonisch", "Bulgarisch", "Burmisch", "Burjatisch", "Catalan", "Cebuano", "Chamorro", "Chewa",
+    "Chichewa", "Chinesisch", "Cornish", "Dakota", "Dänisch", "Dari", "Deutsch", "Dhundari", "Dzongkha",
+    "Englisch", "Esperanto", "Estnisch", "Fidschianisch", "Finnisch", "Flämisch", "Französisch",
+    "Friaulisch", "Fulah", "Galicisch", "Georgisch", "Germanisch", "Gilbertesisch", "Gotisch",
+    "Griechisch", "Grönländisch", "Guarani", "Gujarati", "Haida", "Haitianisch", "Hausa", "Hawaiisch",
+    "Hebräisch", "Hindi", "Hiri Motu", "Hmong", "Iban", "Ibo", "Icelandic", "Igbo", "Ilocano",
+    "Indonesisch", "Inuktitut", "Inupiak", "Irisch", "Isländisch", "Italienisch", "Japanisch", "Javanisch",
+    "Kannada", "Kanuri", "Kasachisch", "Kashmiri", "Kasubisch", "Katalanisch", "Kazakh", "Khmer",
+    "Kikuyu", "Kinyarwanda", "Kirgisisch", "Kirundi", "Komi", "Kongo", "Koreanisch", "Kroatisch",
+    "Kurdisch", "Ladino", "Laotisch", "Latein", "Lettisch", "Ligurisch", "Limburgisch", "Lingala",
+    "Litauisch", "Lombardisch", "Luganda", "Luxemburgisch", "Macedonian", "Maduresisch", "Magahi",
+    "Maithili", "Malagasy", "Malaiisch", "Malayalam", "Maltesisch", "Manchu", "Mandar", "Mandinka",
+    "Manx", "Maori", "Marathi", "Mari", "Marshallese", "Mayan", "Mazandarani", "Mende", "Minangkabau",
+    "Mizo", "Mongolisch", "Nahuatl", "Nauruanisch", "Navajo", "Ndebele", "Ndonga", "Nepali",
+    "Neuguinea-Pidgin", "Niederländisch", "Niedersorbisch", "Nigerian Pidgin", "Nordkurdisch",
+    "Norwegisch", "Nyanja", "Ojibwe", "Oriya", "Oromo", "Ossetisch", "Panjabi", "Paschtu", "Persisch",
+    "Polnisch", "Portugiesisch", "Quechua", "Rätoromanisch", "Rumänisch", "Russisch", "Samoanisch",
+    "Sanskrit", "Sardisch", "Schottisch-Gälisch", "Schwedisch", "Serbisch", "Sesotho", "Setswana",
+    "Shona", "Sindhi", "Singhalesisch", "Slowakisch", "Slowenisch", "Somali", "Spanisch", "Suaheli",
+    "Süd-Azerbaidschanisch", "Süd-Ndebele", "Syrisch", "Tagalog", "Tahitianisch", "Tajik", "Tamil",
+    "Tatarisch", "Telugu", "Thailändisch", "Tibetisch", "Tigrinya", "Tok Pisin", "Tonganisch",
+    "Tschechisch", "Tschetschenisch", "Türkisch", "Turkmenisch", "Uigurisch", "Ukrainisch", "Ungarisch",
+    "Urdu", "Usbekisch", "Venda", "Vietnamesisch", "Wallisisch", "Walisisch", "Waray", "Weißrussisch",
+    "Wolof", "Xhosa", "Yiddish", "Yoruba", "Zaza", "Zhuang", "Zulu"
+  ];
+
+  const continents = {
+    "Africa": [...],
+    "Asia": [...],
+    "Europe": [...],
+    "North America": [...],
+    "South America": [...],
+    "Oceania": [...],
+    "Observers": ["Vatican City", "Palestine"]
+  };
+
+  const langSelect = document.getElementById('languageSelect');
+  languageList.forEach(lang => {
+    const opt = document.createElement('option');
+    opt.value = lang;
+    opt.textContent = lang;
+    langSelect.appendChild(opt);
+  });
+
+  const ticketType = document.getElementById('ticketType');
+  const continentGroup = document.getElementById('continentGroup');
+  const countryGroup = document.getElementById('countryGroup');
+  const continentSelect = document.getElementById('continentSelect');
+  const countrySelect = document.getElementById('countrySelect');
+
+  ticketType.addEventListener('change', () => {
+    const val = ticketType.value;
+    if (val === 'continent') {
+      continentGroup.style.display = 'block';
+      countryGroup.style.display = 'none';
+    } else if (val === 'country') {
+      continentGroup.style.display = 'block';
+      countryGroup.style.display = 'block';
+    } else {
+      continentGroup.style.display = 'none';
+      countryGroup.style.display = 'none';
     }
-  </script>
+  });
+
+  for (const c in continents) {
+    const opt = document.createElement('option');
+    opt.value = c;
+    opt.textContent = c;
+    continentSelect.appendChild(opt);
+  }
+
+  continentSelect.addEventListener('change', () => {
+    const selected = continentSelect.value;
+    countrySelect.innerHTML = '';
+    continents[selected].forEach(country => {
+      const opt = document.createElement('option');
+      opt.value = country;
+      opt.textContent = country;
+      countrySelect.appendChild(opt);
+    });
+  });
+
+  ticketType.dispatchEvent(new Event('change'));
+</script>
 
 </body>
 </html>
