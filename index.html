@@ -2,63 +2,197 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Global Lotto PI</title>
   <style>
-    body {
+    body, html {
       margin: 0;
-      font-family: "Segoe UI", sans-serif;
-      background: url('background.jpg') no-repeat center center fixed;
-      background-size: cover;
-      color: white;
+      padding: 0;
+      height: 100%;
+      font-family: Arial, sans-serif;
     }
-    header {
-      background-color: rgba(0,0,0,0.6);
-      padding: 10px 20px;
+
+    .background {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: url('Global_Lotto_PI_Background.png') no-repeat center center fixed;
+      background-size: cover;
+      z-index: -1;
+    }
+
+    header {
       display: flex;
       align-items: center;
+      justify-content: flex-start;
+      background-color: rgba(123, 44, 191, 0.85);
+      padding: 15px 20px;
+      gap: 12px;
     }
+
     header img {
-      height: 50px;
+      height: 45px;
+      width: auto;
     }
-    main {
-      padding: 100px 20px 20px 20px;
-      text-align: center;
-    }
-    h1 {
-      font-size: 3em;
-      color: #fff;
-    }
-    .lang-select {
-      margin-top: 30px;
-    }
-    .lang-select button {
-      margin: 10px;
-      padding: 10px 20px;
-      font-size: 1em;
-      border: none;
-      border-radius: 6px;
-      background-color: #8b3af3;
+
+    header h1 {
       color: white;
+      font-weight: 700;
+      font-size: 30px;
+      margin: 0;
+    }
+
+    main {
+      max-width: 600px;
+      background-color: rgba(255, 255, 255, 0.9);
+      margin: 40px auto;
+      border-radius: 10px;
+      padding: 25px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    select, input, button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 6px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #aaa;
+      box-sizing: border-box;
+    }
+
+    button {
+      margin-top: 25px;
+      background-color: #7b2cbf;
+      color: white;
+      border: none;
       cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background-color: #5a189a;
+    }
+
+    .warning {
+      margin-top: 35px;
+      font-weight: bold;
+      color: #b22222;
+      text-align: center;
     }
   </style>
 </head>
 <body>
-  <header>
-    <img src="logo.png" alt="Global Lotto PI Logo" />
-  </header>
-  <main>
-    <h1>Welcome to Global Lotto PI</h1>
-    <div class="lang-select">
-      <button>English</button>
-      <button>Deutsch</button>
-      <button>Shqip</button>
-    </div>
-  </main>
+
+<div class="background"></div>
+
+<header>
+  <img src="Global_Lotto_PI_Logo.png" alt="Global Lotto PI Logo" />
+  <h1>GLOBAL LOTTO PI</h1>
+</header>
+
+<main>
+  <label for="languageSelect">Select language:</label>
+  <select id="languageSelect">
+    <option value="en" selected>English</option>
+    <option value="de">German</option>
+    <option value="fr">French</option>
+    <option value="es">Spanish</option>
+  </select>
+
+  <label for="ticketType">Choose lotto type:</label>
+  <select id="ticketType">
+    <option value="global" selected>Global Lotto</option>
+    <option value="continent">Continent Lotto</option>
+    <option value="country">Country Lotto</option>
+  </select>
+
+  <div id="continentBox" style="display:none;">
+    <label for="continentSelect">Select continent:</label>
+    <select id="continentSelect"></select>
+  </div>
+
+  <div id="countryBox" style="display:none;">
+    <label for="countrySelect">Select country:</label>
+    <select id="countrySelect"></select>
+  </div>
+
+  <button id="joinBtn">Join now</button>
+
+  <div class="warning">
+    ⚠️ Never enter your 24-word passphrase here! Use only the official Pi Browser Wallet.
+  </div>
+</main>
+
+<script>
+  const locations = {
+    Africa: [ "Algeria", "Angola", "Benin", "Botswana", "Burkina Faso", "Burundi", "Cabo Verde", "Cameroon", "Central African Republic", "Chad", "Comoros", "Congo (Brazzaville)", "Congo (Kinshasa)", "Djibouti", "Egypt", "Equatorial Guinea", "Eritrea", "Eswatini", "Ethiopia", "Gabon", "Gambia", "Ghana", "Guinea", "Guinea-Bissau", "Ivory Coast", "Kenya", "Lesotho", "Liberia", "Libya", "Madagascar", "Malawi", "Mali", "Mauritania", "Mauritius", "Morocco", "Mozambique", "Namibia", "Niger", "Nigeria", "Rwanda", "Sao Tome & Principe", "Senegal", "Seychelles", "Sierra Leone", "Somalia", "South Africa", "South Sudan", "Sudan", "Tanzania", "Togo", "Tunisia", "Uganda", "Zambia", "Zimbabwe" ],
+    Antarctica: ["Antarctica"],
+    Asia: [ "Afghanistan", "Armenia", "Azerbaijan", "Bahrain", "Bangladesh", "Bhutan", "Brunei", "Cambodia", "China", "Cyprus", "Georgia", "India", "Indonesia", "Iran", "Iraq", "Israel", "Japan", "Jordan", "Kazakhstan", "Kuwait", "Kyrgyzstan", "Laos", "Lebanon", "Malaysia", "Maldives", "Mongolia", "Myanmar", "Nepal", "North Korea", "Oman", "Pakistan", "Palestine", "Philippines", "Qatar", "Russia", "Saudi Arabia", "Singapore", "South Korea", "Sri Lanka", "Syria", "Taiwan", "Tajikistan", "Thailand", "Timor-Leste", "Turkey", "Turkmenistan", "UAE", "Uzbekistan", "Vietnam", "Yemen" ],
+    Europe: [ "Albania", "Andorra", "Austria", "Belarus", "Belgium", "Bosnia and Herzegovina", "Bulgaria", "Croatia", "Czech Republic", "Denmark", "Estonia", "Finland", "France", "Germany", "Greece", "Hungary", "Iceland", "Ireland", "Italy", "Kosovo", "Latvia", "Liechtenstein", "Lithuania", "Luxembourg", "Malta", "Moldova", "Monaco", "Montenegro", "Netherlands", "North Macedonia", "Norway", "Poland", "Portugal", "Romania", "San Marino", "Serbia", "Slovakia", "Slovenia", "Spain", "Sweden", "Switzerland", "Ukraine", "United Kingdom", "Vatican City" ],
+    "North America": [ "Antigua and Barbuda", "Bahamas", "Barbados", "Belize", "Canada", "Costa Rica", "Cuba", "Dominica", "Dominican Republic", "El Salvador", "Grenada", "Guatemala", "Haiti", "Honduras", "Jamaica", "Mexico", "Nicaragua", "Panama", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Trinidad and Tobago", "United States" ],
+    Oceania: [ "Australia", "Fiji", "Kiribati", "Marshall Islands", "Micronesia", "Nauru", "New Zealand", "Palau", "Papua New Guinea", "Samoa", "Solomon Islands", "Tonga", "Tuvalu", "Vanuatu" ],
+    "South America": [ "Argentina", "Bolivia", "Brazil", "Chile", "Colombia", "Ecuador", "Guyana", "Paraguay", "Peru", "Suriname", "Uruguay", "Venezuela" ]
+  };
+
+  const continentSelect = document.getElementById('continentSelect');
+  const countrySelect = document.getElementById('countrySelect');
+
+  function populateContinents() {
+    continentSelect.innerHTML = '<option value="" disabled selected>Select continent</option>';
+    for (const continent in locations) {
+      const opt = document.createElement('option');
+      opt.value = continent;
+      opt.textContent = continent;
+      continentSelect.appendChild(opt);
+    }
+  }
+
+  continentSelect.addEventListener('change', () => {
+    const continent = continentSelect.value;
+    countrySelect.innerHTML = '<option value="" disabled selected>Select country</option>';
+    if (locations[continent]) {
+      locations[continent].forEach(country => {
+        const opt = document.createElement('option');
+        opt.value = country;
+        opt.textContent = country;
+        countrySelect.appendChild(opt);
+      });
+    }
+  });
+
+  const ticketTypeSelect = document.getElementById('ticketType');
+  const continentBox = document.getElementById('continentBox');
+  const countryBox = document.getElementById('countryBox');
+
+  ticketTypeSelect.addEventListener('change', () => {
+    const val = ticketTypeSelect.value;
+    if (val === 'continent') {
+      continentBox.style.display = 'block';
+      countryBox.style.display = 'none';
+    } else if (val === 'country') {
+      continentBox.style.display = 'block';
+      countryBox.style.display = 'block';
+    } else {
+      continentBox.style.display = 'none';
+      countryBox.style.display = 'none';
+    }
+  });
+
+  document.getElementById('languageSelect').addEventListener('change', (e) => {
+    alert('Script processes only English language for now.');
+  });
+
+  window.onload = () => {
+    populateContinents();
+    ticketTypeSelect.dispatchEvent(new Event('change'));
+  };
+</script>
+
 </body>
 </html>
