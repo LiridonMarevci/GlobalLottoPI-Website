@@ -2,148 +2,128 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GLOBAL LOTTO PI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Global Lotto PI</title>
   <style>
-    body {
+    body, html {
       margin: 0;
-      font-family: Arial, sans-serif;
+      padding: 0;
+      height: 100%;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    /* Hintergrund fixieren */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
       background: url('background.png') no-repeat center center fixed;
       background-size: cover;
+      z-index: -1;
     }
+
     header {
       display: flex;
       align-items: center;
-      background-color: #7B3FE4;
-      padding: 20px;
-      color: gold;
-      font-weight: bold;
-      font-size: 26px;
+      justify-content: center;
+      padding: 15px;
+      background-color: rgba(123, 44, 191, 0.9);
     }
+
     header img {
-      height: 50px;
+      height: 60px;
+      width: auto;
       margin-right: 15px;
     }
-    .container {
-      background: white;
+
+    header h1 {
+      color: gold;
+      font-size: 32px;
+      margin: 0;
+      font-weight: bold;
+      text-shadow: 1px 1px 2px #000;
+    }
+
+    main {
       max-width: 500px;
       margin: 50px auto;
+      background-color: rgba(255, 255, 255, 0.95);
       padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
     }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 5px;
+    }
+
     select, button {
       width: 100%;
-      padding: 10px;
-      margin-top: 15px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
+      padding: 12px;
       font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-bottom: 15px;
     }
+
     button {
-      background-color: #7B3FE4;
+      background-color: #7b2cbf;
       color: white;
+      border: none;
       font-weight: bold;
-      cursor: pointer;
+      transition: background 0.3s;
     }
+
     button:hover {
-      background-color: #5e29b3;
+      background-color: #5a189a;
     }
+
     .warning {
-      margin-top: 20px;
-      color: red;
-      font-weight: bold;
-      font-size: 14px;
       text-align: center;
+      color: darkred;
+      font-weight: bold;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
+
   <header>
     <img src="logo.png" alt="Global Lotto PI Logo" />
-    GLOBAL LOTTO PI
+    <h1>GLOBAL LOTTO PI</h1>
   </header>
-  <div class="container">
-    <label for="language"><b>Select language:</b></label>
-    <select id="language">
-      <!-- Languages will be inserted here by JS -->
+
+  <main>
+    <label for="languageSelect">Select language:</label>
+    <select id="languageSelect">
+      <option value="en" selected>English</option>
+      <option value="de">German</option>
+      <option value="fr">French</option>
+      <option value="es">Spanish</option>
     </select>
 
-    <label for="type"><b>Choose lotto type:</b></label>
-    <select id="type">
-      <option value="global">Global Lotto</option>
+    <label for="lottoSelect">Choose lotto type:</label>
+    <select id="lottoSelect">
+      <option value="global" selected>Global Lotto</option>
       <option value="continent">Continent Lotto</option>
       <option value="country">Country Lotto</option>
     </select>
 
-    <label for="continent"><b>Select continent:</b></label>
-    <select id="continent">
-      <option value="Africa">Africa</option>
-      <option value="Asia">Asia</option>
-      <option value="Europe">Europe</option>
-      <option value="North America">North America</option>
-      <option value="South America">South America</option>
-      <option value="Oceania">Oceania</option>
-    </select>
-
-    <label for="country"><b>Select country:</b></label>
-    <select id="country">
-      <!-- Länder werden per JS eingefügt -->
-    </select>
-
-    <button onclick="proceed()">Join now</button>
+    <button onclick="goToJoin()">Join now</button>
 
     <div class="warning">
       ⚠️ Never enter your 24-word passphrase here! Use only the official Pi Browser Wallet.
     </div>
-  </div>
+  </main>
 
   <script>
-    // Sprachenliste aus der CSV
-    const languages = [
-      "Abchasisch", "Achinesisch", "Adygisch", "Afar", "Afrikaans", "Aghem", "Ainu", "Akan", "Akoose", "Albanisch",
-      // ... bis zu 343 Einträgen (hier gekürzt, du bekommst gleich die vollständige Liste eingefügt)
-    ];
-
-    const countries = [
-      "Ägypten", "Äquatorialguinea", "Äthiopien", "Algerien", "Angola", "Benin", "Botswana", "Burkina Faso",
-      "Burundi", "Côte d’Ivoire", "Demokratische Republik Kongo", "Dschibuti", "Eritrea", "Eswatini",
-      "Gabun", "Gambia", "Ghana", "Guinea", "Guinea-Bissau", "Kamerun", "Kap Verde", "Kenia", "Komoren",
-      "Republik Kongo", "Lesotho", "Liberia", "Libyen", "Madagaskar", "Malawi", "Mali", "Marokko",
-      "Mauretanien", "Mauritius", "Mosambik", "Namibia", "Niger", "Nigeria", "Ruanda", "Sambia",
-      "São Tomé und Príncipe", "Senegal", "Seychellen", "Sierra Leone", "Simbabwe", "Somalia", "Südafrika",
-      "Sudan", "Südsudan", "Tansania", "Togo", "Tschad", "Tunesien", "Uganda", "Zentralafrikanische Republik",
-      "Afghanistan", "Armenien", "Aserbaidschan", "Bahrain", "Bangladesch", "Bhutan", "Brunei", "China",
-      "Georgien", "Indien", "Indonesien", "Irak", "Iran", "Israel", "Japan", "Jordanien",
-      "Kambodscha", "Kasachstan", "Katar", "Kirgisistan", "Kuwait", "Laos", "Libanon", "Malaysia",
-      // ... (weitere Länder folgen, komplette Liste wird gleich eingefügt)
-    ];
-
-    const langDropdown = document.getElementById('language');
-    const countryDropdown = document.getElementById('country');
-
-    languages.forEach(lang => {
-      const opt = document.createElement('option');
-      opt.value = lang;
-      opt.textContent = lang;
-      langDropdown.appendChild(opt);
-    });
-
-    countries.forEach(country => {
-      const opt = document.createElement('option');
-      opt.value = country;
-      opt.textContent = country;
-      countryDropdown.appendChild(opt);
-    });
-
-    function proceed() {
-      const lang = langDropdown.value;
-      const type = document.getElementById('type').value;
-      const continent = document.getElementById('continent').value;
-      const country = countryDropdown.value;
-      alert(`Selected: Language = ${lang}, Type = ${type}, Continent = ${continent}, Country = ${country}`);
-      // Weiterleitung oder Seitenaufruf je nach Auswahl folgt hier (später einbauen)
+    function goToJoin() {
+      window.location.href = "join.html";
     }
   </script>
+
 </body>
 </html>
