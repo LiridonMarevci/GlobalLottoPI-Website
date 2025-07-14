@@ -1,129 +1,730 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Global Lotto PI</title>
-  <style>
-    body, html {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      font-family: 'Segoe UI', sans-serif;
-    }
-
-    /* Hintergrund fixieren */
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: url('background.png') no-repeat center center fixed;
-      background-size: cover;
-      z-index: -1;
-    }
-
-    header {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 15px;
-      background-color: rgba(123, 44, 191, 0.9);
-    }
-
-    header img {
-      height: 60px;
-      width: auto;
-      margin-right: 15px;
-    }
-
-    header h1 {
-      color: gold;
-      font-size: 32px;
-      margin: 0;
-      font-weight: bold;
-      text-shadow: 1px 1px 2px #000;
-    }
-
-    main {
-      max-width: 500px;
-      margin: 50px auto;
-      background-color: rgba(255, 255, 255, 0.95);
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-    }
-
-    label {
-      font-weight: bold;
-      display: block;
-      margin-top: 15px;
-      margin-bottom: 5px;
-    }
-
-    select, button {
-      width: 100%;
-      padding: 12px;
-      font-size: 16px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      margin-bottom: 15px;
-    }
-
-    button {
-      background-color: #7b2cbf;
-      color: white;
-      border: none;
-      font-weight: bold;
-      transition: background 0.3s;
-    }
-
-    button:hover {
-      background-color: #5a189a;
-    }
-
-    .warning {
-      text-align: center;
-      color: darkred;
-      font-weight: bold;
-      margin-top: 20px;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Global Lotto PI</title>
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+  }
+  .background {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: url('background.png') no-repeat center center fixed;
+    background-size: cover;
+    z-index: -1;
+  }
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(123, 44, 191, 0.85);
+    padding: 15px 20px;
+    gap: 12px;
+  }
+  header img {
+    height: 45px;
+    width: auto;
+  }
+  header h1 {
+    color: #FFD700;
+    font-weight: 700;
+    font-size: 30px;
+    margin: 0;
+  }
+  main {
+    max-width: 600px;
+    background-color: rgba(255, 255, 255, 0.95);
+    margin: 40px auto;
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+  }
+  label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+  }
+  select, button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 6px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #aaa;
+    box-sizing: border-box;
+  }
+  button {
+    margin-top: 25px;
+    background-color: #7b2cbf;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  button:hover {
+    background-color: #5a189a;
+  }
+  .warning {
+    margin-top: 35px;
+    font-weight: bold;
+    color: #b22222;
+    text-align: center;
+  }
+</style>
 </head>
 <body>
+<div class="background"></div>
+<header>
+  <img src="logo.png" alt="Global Lotto PI Logo" />
+  <h1>GLOBAL LOTTO PI</h1>
+</header>
+<main>
+  <label for="languageSelect">Select language:</label>
+  <select id="languageSelect">
+    <option value="Abchasisch">Abchasisch</option>
+<option value="Achinesisch">Achinesisch</option>
+<option value="Adygisch">Adygisch</option>
+<option value="Afar">Afar</option>
+<option value="Afrikaans">Afrikaans</option>
+<option value="Aghem">Aghem</option>
+<option value="Ainu">Ainu</option>
+<option value="Akan">Akan</option>
+<option value="Akoose">Akoose</option>
+<option value="Albanisch">Albanisch</option>
+<option value="Alemannisch">Alemannisch</option>
+<option value="Alur">Alur</option>
+<option value="Amharisch">Amharisch</option>
+<option value="Amis">Amis</option>
+<option value="Angika">Angika</option>
+<option value="Arabisch">Arabisch</option>
+<option value="Aragonesisch">Aragonesisch</option>
+<option value="Armenisch">Armenisch</option>
+<option value="Aromanisch">Aromanisch</option>
+<option value="Arpitan">Arpitan</option>
+<option value="Aserbaidschanisch">Aserbaidschanisch</option>
+<option value="Assamesisch">Assamesisch</option>
+<option value="Asturisch">Asturisch</option>
+<option value="Atsam">Atsam</option>
+<option value="Awadhi">Awadhi</option>
+<option value="Aymara">Aymara</option>
+<option value="Bajau">Bajau</option>
+<option value="Bakossi">Bakossi</option>
+<option value="Bali">Bali</option>
+<option value="Balochi">Balochi</option>
+<option value="Baluchi">Baluchi</option>
+<option value="Bambara">Bambara</option>
+<option value="Banyumasan">Banyumasan</option>
+<option value="Basa">Basa</option>
+<option value="Bashkirisch">Bashkirisch</option>
+<option value="Baskisch">Baskisch</option>
+<option value="Batak Toba">Batak Toba</option>
+<option value="Baybayanon">Baybayanon</option>
+<option value="Belutschi">Belutschi</option>
+<option value="Bemba">Bemba</option>
+<option value="Bengalisch">Bengalisch</option>
+<option value="Bhojpuri">Bhojpuri</option>
+<option value="Bikol">Bikol</option>
+<option value="Binukid">Binukid</option>
+<option value="Bislama">Bislama</option>
+<option value="Blissymbolics">Blissymbolics</option>
+<option value="Bodo">Bodo</option>
+<option value="Bosnisch">Bosnisch</option>
+<option value="Bretonisch">Bretonisch</option>
+<option value="Buginesisch">Buginesisch</option>
+<option value="Bulgarisch">Bulgarisch</option>
+<option value="Buriatisch">Buriatisch</option>
+<option value="Burjatisch">Burjatisch</option>
+<option value="Burmesisch">Burmesisch</option>
+<option value="Cajun French">Cajun French</option>
+<option value="Cebuano">Cebuano</option>
+<option value="Cham">Cham</option>
+<option value="Chamorro">Chamorro</option>
+<option value="Chichewa">Chichewa</option>
+<option value="Chickasaw">Chickasaw</option>
+<option value="Chinesisch">Chinesisch</option>
+<option value="Choctaw">Choctaw</option>
+<option value="Chuvash">Chuvash</option>
+<option value="Cofán">Cofán</option>
+<option value="Cornisch">Cornisch</option>
+<option value="Dagbani">Dagbani</option>
+<option value="Dakelh">Dakelh</option>
+<option value="Dakota">Dakota</option>
+<option value="Dari">Dari</option>
+<option value="Dazaga">Dazaga</option>
+<option value="Deutsch">Deutsch</option>
+<option value="Dinka">Dinka</option>
+<option value="Divehi">Divehi</option>
+<option value="Dogri">Dogri</option>
+<option value="Dungan">Dungan</option>
+<option value="Dzongkha">Dzongkha</option>
+<option value="Dänisch">Dänisch</option>
+<option value="Efik">Efik</option>
+<option value="Englisch">Englisch</option>
+<option value="Erzya">Erzya</option>
+<option value="Esperanto">Esperanto</option>
+<option value="Estnisch">Estnisch</option>
+<option value="Evenki">Evenki</option>
+<option value="Ewe">Ewe</option>
+<option value="Ewondo">Ewondo</option>
+<option value="Fang">Fang</option>
+<option value="Faroese">Faroese</option>
+<option value="Fidschi">Fidschi</option>
+<option value="Finnisch">Finnisch</option>
+<option value="Fon">Fon</option>
+<option value="Französisch">Französisch</option>
+<option value="Friulan">Friulan</option>
+<option value="Fula">Fula</option>
+<option value="Fulah">Fulah</option>
+<option value="Ga">Ga</option>
+<option value="Gagauz">Gagauz</option>
+<option value="Galicisch">Galicisch</option>
+<option value="Ganda">Ganda</option>
+<option value="Georgisch">Georgisch</option>
+<option value="Ghomala">Ghomala</option>
+<option value="Gilbertese">Gilbertese</option>
+<option value="Greenlandic">Greenlandic</option>
+<option value="Griechisch">Griechisch</option>
+<option value="Grönländisch">Grönländisch</option>
+<option value="Guambiano">Guambiano</option>
+<option value="Guarani">Guarani</option>
+<option value="Gujarati">Gujarati</option>
+<option value="Gwich’in">Gwich’in</option>
+<option value="Haitianisch">Haitianisch</option>
+<option value="Hani">Hani</option>
+<option value="Hausa">Hausa</option>
+<option value="Hawaiianisch">Hawaiianisch</option>
+<option value="Hazaragi">Hazaragi</option>
+<option value="Hebräisch">Hebräisch</option>
+<option value="Hindi">Hindi</option>
+<option value="Hiri Motu">Hiri Motu</option>
+<option value="Hmong">Hmong</option>
+<option value="Ho">Ho</option>
+<option value="Iban">Iban</option>
+<option value="Ibibio">Ibibio</option>
+<option value="Ido">Ido</option>
+<option value="Igbo">Igbo</option>
+<option value="Ijo">Ijo</option>
+<option value="Ilokano">Ilokano</option>
+<option value="Indonesisch">Indonesisch</option>
+<option value="Inguschisch">Inguschisch</option>
+<option value="Inuktitut">Inuktitut</option>
+<option value="Inupiaq">Inupiaq</option>
+<option value="Irisch">Irisch</option>
+<option value="Isländisch">Isländisch</option>
+<option value="Italienisch">Italienisch</option>
+<option value="Itelmen">Itelmen</option>
+<option value="Jakun">Jakun</option>
+<option value="Japanisch">Japanisch</option>
+<option value="Javanisch">Javanisch</option>
+<option value="Jingpho">Jingpho</option>
+<option value="Kabardisch">Kabardisch</option>
+<option value="Kabyle">Kabyle</option>
+<option value="Kachin">Kachin</option>
+<option value="Kalmyk">Kalmyk</option>
+<option value="Kamba">Kamba</option>
+<option value="Kanembu">Kanembu</option>
+<option value="Kannada">Kannada</option>
+<option value="Kanuri">Kanuri</option>
+<option value="Kara-Kalpakisch">Kara-Kalpakisch</option>
+<option value="Karachay-Balkar">Karachay-Balkar</option>
+<option value="Karelisch">Karelisch</option>
+<option value="Kasachisch">Kasachisch</option>
+<option value="Kaschmirisch">Kaschmirisch</option>
+<option value="Kashubisch">Kashubisch</option>
+<option value="Katalanisch">Katalanisch</option>
+<option value="Kawi">Kawi</option>
+<option value="Kazhimakan">Kazhimakan</option>
+<option value="Kerek">Kerek</option>
+<option value="Ket">Ket</option>
+<option value="Khalaj">Khalaj</option>
+<option value="Khmer Loeu">Khmer Loeu</option>
+<option value="Khowar">Khowar</option>
+<option value="Khvarshi">Khvarshi</option>
+<option value="Kikongo">Kikongo</option>
+<option value="Kimbundu">Kimbundu</option>
+<option value="Kinyabwisha">Kinyabwisha</option>
+<option value="Kinyarwanda">Kinyarwanda</option>
+<option value="Kiput">Kiput</option>
+<option value="Kirgisisch">Kirgisisch</option>
+<option value="Kirmanjki">Kirmanjki</option>
+<option value="Komi">Komi</option>
+<option value="Komi-Permjak">Komi-Permjak</option>
+<option value="Kongo">Kongo</option>
+<option value="Konkani">Konkani</option>
+<option value="Koreanisch">Koreanisch</option>
+<option value="Kpelle">Kpelle</option>
+<option value="Kroatisch">Kroatisch</option>
+<option value="Kuanyama">Kuanyama</option>
+<option value="Kumyk">Kumyk</option>
+<option value="Kurdisch">Kurdisch</option>
+<option value="Kurdisch (Zazaki)">Kurdisch (Zazaki)</option>
+<option value="Ladino">Ladino</option>
+<option value="Lahu">Lahu</option>
+<option value="Lao">Lao</option>
+<option value="Latein">Latein</option>
+<option value="Lazisch">Lazisch</option>
+<option value="Lettisch">Lettisch</option>
+<option value="Lezgisch">Lezgisch</option>
+<option value="Ligurisch">Ligurisch</option>
+<option value="Limburgisch">Limburgisch</option>
+<option value="Lingala">Lingala</option>
+<option value="Litauisch">Litauisch</option>
+<option value="Lojban">Lojban</option>
+<option value="Lombardisch">Lombardisch</option>
+<option value="Luba-Katanga">Luba-Katanga</option>
+<option value="Luganda">Luganda</option>
+<option value="Lule Sami">Lule Sami</option>
+<option value="Lunda">Lunda</option>
+<option value="Luri">Luri</option>
+<option value="Luxemburgisch">Luxemburgisch</option>
+<option value="Maasai">Maasai</option>
+<option value="Maba">Maba</option>
+<option value="Macedonisch (alt)">Macedonisch (alt)</option>
+<option value="Machame">Machame</option>
+<option value="Maduresisch">Maduresisch</option>
+<option value="Maithili">Maithili</option>
+<option value="Makhuwa">Makhuwa</option>
+<option value="Malagasy">Malagasy</option>
+<option value="Malagasy Plateau">Malagasy Plateau</option>
+<option value="Malaiisch">Malaiisch</option>
+<option value="Malayalam">Malayalam</option>
+<option value="Maltesisch">Maltesisch</option>
+<option value="Malvi">Malvi</option>
+<option value="Mandar">Mandar</option>
+<option value="Mandingo">Mandingo</option>
+<option value="Manggarai">Manggarai</option>
+<option value="Maninka">Maninka</option>
+<option value="Manx">Manx</option>
+<option value="Maori">Maori</option>
+<option value="Mapudungun">Mapudungun</option>
+<option value="Marathi">Marathi</option>
+<option value="Mari">Mari</option>
+<option value="Marshallese">Marshallese</option>
+<option value="Masaba">Masaba</option>
+<option value="Mayo">Mayo</option>
+<option value="Mazandarani">Mazandarani</option>
+<option value="Mazedonisch">Mazedonisch</option>
+<option value="Mbundu">Mbundu</option>
+<option value="Meitei">Meitei</option>
+<option value="Menominee">Menominee</option>
+<option value="Meru">Meru</option>
+<option value="Minangkabau">Minangkabau</option>
+<option value="Mingrelisch">Mingrelisch</option>
+<option value="Mirandese">Mirandese</option>
+<option value="Mising">Mising</option>
+<option value="Miwok">Miwok</option>
+<option value="Mizo">Mizo</option>
+<option value="Mohawk">Mohawk</option>
+<option value="Moksha">Moksha</option>
+<option value="Mon">Mon</option>
+<option value="Mongolisch">Mongolisch</option>
+<option value="Mossi">Mossi</option>
+<option value="Mru">Mru</option>
+<option value="Mundang">Mundang</option>
+<option value="Muscogee">Muscogee</option>
+<option value="Nahuatl">Nahuatl</option>
+<option value="Nande">Nande</option>
+<option value="Nauruanisch">Nauruanisch</option>
+<option value="Nauruisch">Nauruisch</option>
+<option value="Navajo">Navajo</option>
+<option value="Ndonga">Ndonga</option>
+<option value="Ngemba">Ngemba</option>
+<option value="Ngomba">Ngomba</option>
+<option value="Ngäbere">Ngäbere</option>
+<option value="Niederländisch">Niederländisch</option>
+<option value="Niuean">Niuean</option>
+<option value="Nogai">Nogai</option>
+<option value="Nord-Friesisch">Nord-Friesisch</option>
+<option value="Nord-Sami">Nord-Sami</option>
+<option value="Norwegisch (Bokmål)">Norwegisch (Bokmål)</option>
+<option value="Norwegisch (Nynorsk)">Norwegisch (Nynorsk)</option>
+<option value="Novial">Novial</option>
+<option value="Nuer">Nuer</option>
+<option value="Nyamwezi">Nyamwezi</option>
+<option value="Nyanja">Nyanja</option>
+<option value="Nyankole">Nyankole</option>
+<option value="Nyoro">Nyoro</option>
+<option value="Nzema">Nzema</option>
+<option value="N’Ko">N’Ko</option>
+<option value="Occitan">Occitan</option>
+<option value="Odia (Oriya)">Odia (Oriya)</option>
+<option value="Ojibwe">Ojibwe</option>
+<option value="Oriya">Oriya</option>
+<option value="Oromo">Oromo</option>
+<option value="Osage">Osage</option>
+<option value="Ossetisch">Ossetisch</option>
+<option value="Paiwan">Paiwan</option>
+<option value="Pampanga">Pampanga</option>
+<option value="Pangasinan">Pangasinan</option>
+<option value="Papiamento">Papiamento</option>
+<option value="Papiamentu">Papiamentu</option>
+<option value="Paschtu">Paschtu</option>
+<option value="Pedi">Pedi</option>
+<option value="Persisch">Persisch</option>
+<option value="Picardisch">Picardisch</option>
+<option value="Piedmontesisch">Piedmontesisch</option>
+<option value="Pohnpeian">Pohnpeian</option>
+<option value="Polnisch">Polnisch</option>
+<option value="Portugiesisch">Portugiesisch</option>
+<option value="Punjabi">Punjabi</option>
+<option value="Pushto">Pushto</option>
+<option value="Pāli">Pāli</option>
+<option value="Quechua">Quechua</option>
+<option value="Rajasthani">Rajasthani</option>
+<option value="Rapa Nui">Rapa Nui</option>
+<option value="Rarotongan">Rarotongan</option>
+<option value="Rohingya">Rohingya</option>
+<option value="Romani">Romani</option>
+<option value="Romansh">Romansh</option>
+<option value="Rumänisch">Rumänisch</option>
+<option value="Rundi">Rundi</option>
+<option value="Russisch">Russisch</option>
+<option value="Saho">Saho</option>
+<option value="Samoanisch">Samoanisch</option>
+<option value="Sandawe">Sandawe</option>
+<option value="Sango">Sango</option>
+<option value="Sanskrit">Sanskrit</option>
+<option value="Santali">Santali</option>
+<option value="Saraiki">Saraiki</option>
+<option value="Saramaccan">Saramaccan</option>
+<option value="Sardisch">Sardisch</option>
+<option value="Schottisch-Gälisch">Schottisch-Gälisch</option>
+<option value="Schwedisch">Schwedisch</option>
+<option value="Scots">Scots</option>
+<option value="Selkup">Selkup</option>
+<option value="Sepedi">Sepedi</option>
+<option value="Serbisch">Serbisch</option>
+<option value="Serbokroatisch">Serbokroatisch</option>
+<option value="Seychellenkreol">Seychellenkreol</option>
+<option value="Shan">Shan</option>
+<option value="Shona">Shona</option>
+<option value="Sicilian">Sicilian</option>
+<option value="Sindhi">Sindhi</option>
+<option value="Singhalesisch">Singhalesisch</option>
+<option value="Slowakisch">Slowakisch</option>
+<option value="Slowenisch">Slowenisch</option>
+<option value="Somali">Somali</option>
+<option value="Sotho">Sotho</option>
+<option value="Spanisch">Spanisch</option>
+<option value="Sranan Tongo">Sranan Tongo</option>
+<option value="Sundanesisch">Sundanesisch</option>
+<option value="Swahili">Swahili</option>
+<option value="Swazi">Swazi</option>
+<option value="Tagalog">Tagalog</option>
+<option value="Tahitian">Tahitian</option>
+<option value="Tajikisch">Tajikisch</option>
+<option value="Tamil">Tamil</option>
+<option value="Tatarisch">Tatarisch</option>
+<option value="Telugu">Telugu</option>
+<option value="Tetum">Tetum</option>
+<option value="Thai">Thai</option>
+<option value="Tibetisch">Tibetisch</option>
+<option value="Tigrinya">Tigrinya</option>
+<option value="Tok Pisin">Tok Pisin</option>
+<option value="Tonga">Tonga</option>
+<option value="Tschechisch">Tschechisch</option>
+<option value="Tswana">Tswana</option>
+  </select>
 
-  <header>
-    <img src="logo.png" alt="Global Lotto PI Logo" />
-    <h1>GLOBAL LOTTO PI</h1>
-  </header>
+  <label for="ticketType">Choose lotto type:</label>
+  <select id="ticketType">
+    <option value="global" selected>Global Lotto</option>
+    <option value="continent">Continent Lotto</option>
+    <option value="country">Country Lotto</option>
+  </select>
 
-  <main>
-    <label for="languageSelect">Select language:</label>
-    <select id="languageSelect">
-      <option value="en" selected>English</option>
-      <option value="de">German</option>
-      <option value="fr">French</option>
-      <option value="es">Spanish</option>
-    </select>
+  <div id="continentBox" style="display:none;">
+    <label for="continentSelect">Select continent:</label>
+    <select id="continentSelect"></select>
+  </div>
 
-    <label for="lottoSelect">Choose lotto type:</label>
-    <select id="lottoSelect">
-      <option value="global" selected>Global Lotto</option>
-      <option value="continent">Continent Lotto</option>
-      <option value="country">Country Lotto</option>
-    </select>
+  <div id="countryBox" style="display:none;">
+    <label for="countrySelect">Select country:</label>
+    <select id="countrySelect"></select>
+  </div>
 
-    <button onclick="goToJoin()">Join now</button>
+  <button id="joinBtn">Join now</button>
 
-    <div class="warning">
-      ⚠️ Never enter your 24-word passphrase here! Use only the official Pi Browser Wallet.
-    </div>
-  </main>
+  <div class="warning">
+    ⚠️ Never enter your 24-word passphrase here! Use only the official Pi Browser Wallet.
+  </div>
+</main>
 
-  <script>
-    function goToJoin() {
-      window.location.href = "join.html";
-    }
-  </script>
+<script>
+const locations = {
+  "Africa": [
+    "Ägypten",
+    "Äquatorialguinea",
+    "Äthiopien",
+    "Algerien",
+    "Angola",
+    "Benin",
+    "Botswana",
+    "Burkina Faso",
+    "Burundi",
+    "Côte d’Ivoire (Elfenbeinküste)",
+    "Demokratische Republik Kongo",
+    "Dschibuti",
+    "Eritrea",
+    "Eswatini (ehemals Swasiland)",
+    "Gabun",
+    "Gambia",
+    "Ghana",
+    "Guinea",
+    "Guinea-Bissau",
+    "Kamerun",
+    "Kap Verde",
+    "Kenia",
+    "Komoren",
+    "Republik Kongo",
+    "Lesotho",
+    "Liberia",
+    "Libyen",
+    "Madagaskar",
+    "Malawi",
+    "Mali",
+    "Marokko",
+    "Mauretanien",
+    "Mauritius",
+    "Mosambik",
+    "Namibia",
+    "Niger",
+    "Nigeria",
+    "Ruanda",
+    "Sambia",
+    "São Tomé und Príncipe",
+    "Senegal",
+    "Seychellen",
+    "Sierra Leone",
+    "Simbabwe",
+    "Somalia",
+    "Südafrika",
+    "Sudan",
+    "Südsudan",
+    "Tansania",
+    "Togo",
+    "Tschad",
+    "Tunesien",
+    "Uganda",
+    "Zentralafrikanische Republik"
+  ],
+  "Asia": [
+    "Afghanistan",
+    "Armenien",
+    "Aserbaidschan",
+    "Bahrain",
+    "Bangladesch",
+    "Bhutan",
+    "Brunei",
+    "China",
+    "Georgien",
+    "Indien",
+    "Indonesien",
+    "Irak",
+    "Iran",
+    "Israel",
+    "Japan",
+    "Jordanien",
+    "Kambodscha",
+    "Kasachstan",
+    "Katar",
+    "Kirgisistan",
+    "Kuwait",
+    "Laos",
+    "Libanon",
+    "Malaysia",
+    "Malediven",
+    "Mongolei",
+    "Myanmar (Burma)",
+    "Nepal",
+    "Nordkorea",
+    "Oman",
+    "Pakistan",
+    "Palästina",
+    "Philippinen",
+    "Saudi-Arabien",
+    "Singapur",
+    "Sri Lanka",
+    "Südkorea",
+    "Syrien",
+    "Tadschikistan",
+    "Taiwan*",
+    "Thailand",
+    "Timor-Leste",
+    "Türkei",
+    "Turkmenistan",
+    "Usbekistan",
+    "Vereinigte Arabische Emirate",
+    "Vietnam",
+    "Jemen",
+    "Zypern"
+  ],
+  "Europe": [
+    "Albanien",
+    "Andorra",
+    "Armenien",
+    "Aserbaidschan",
+    "Belgien",
+    "Bosnien und Herzegowina",
+    "Bulgarien",
+    "Dänemark",
+    "Deutschland",
+    "Estland",
+    "Finnland",
+    "Frankreich",
+    "Georgien",
+    "Griechenland",
+    "Irland",
+    "Island",
+    "Italien",
+    "Kasachstan",
+    "Kosovo",
+    "Kroatien",
+    "Lettland",
+    "Liechtenstein",
+    "Litauen",
+    "Luxemburg",
+    "Malta",
+    "Moldau",
+    "Monaco",
+    "Montenegro",
+    "Niederlande",
+    "Nordmazedonien",
+    "Norwegen",
+    "Österreich",
+    "Polen",
+    "Portugal",
+    "Rumänien",
+    "Russland",
+    "San Marino",
+    "Schweden",
+    "Schweiz",
+    "Serbien",
+    "Slowakei",
+    "Slowenien",
+    "Spanien",
+    "Tschechien",
+    "Ukraine",
+    "Ungarn",
+    "Vatikanstadt",
+    "Vereinigtes Königreich",
+    "Weißrussland"
+  ],
+  "North America": [
+    "Antigua und Barbuda",
+    "Bahamas",
+    "Barbados",
+    "Belize",
+    "Costa Rica",
+    "Dominica",
+    "Dominikanische Republik",
+    "El Salvador",
+    "Grenada",
+    "Guatemala",
+    "Haiti",
+    "Honduras",
+    "Jamaika",
+    "Kanada",
+    "Kuba",
+    "Mexiko",
+    "Nicaragua",
+    "Panama",
+    "St. Kitts und Nevis",
+    "St. Lucia",
+    "St. Vincent und die Grenadinen",
+    "Trinidad und Tobago",
+    "Vereinigte Staaten von Amerika"
+  ],
+  "South America": [
+    "Argentinien",
+    "Bolivien",
+    "Brasilien",
+    "Chile",
+    "Ecuador",
+    "Guyana",
+    "Kolumbien",
+    "Paraguay",
+    "Peru",
+    "Suriname",
+    "Uruguay",
+    "Venezuela"
+  ],
+  "Oceania": [
+    "Australien",
+    "Fidschi",
+    "Kiribati",
+    "Marshallinseln",
+    "Mikronesien",
+    "Nauru",
+    "Neuseeland",
+    "Palau",
+    "Papua-Neuguinea",
+    "Samoa",
+    "Salomonen",
+    "Tonga",
+    "Tuvalu",
+    "Vanuatu"
+  ],
+  "Observers": [
+    "Vatikanstadt",
+    "Palästina"
+  ]
+};
+
+const continentSelect = document.getElementById('continentSelect');
+const countrySelect = document.getElementById('countrySelect');
+const ticketTypeSelect = document.getElementById('ticketType');
+const continentBox = document.getElementById('continentBox');
+const countryBox = document.getElementById('countryBox');
+
+function populateContinents() {
+  continentSelect.innerHTML = '<option value="" disabled selected>Select continent</option>';
+  for (const continent in locations) {
+    const opt = document.createElement('option');
+    opt.value = continent;
+    opt.textContent = continent;
+    continentSelect.appendChild(opt);
+  }
+}
+
+continentSelect.addEventListener('change', () => {
+  const continent = continentSelect.value;
+  countrySelect.innerHTML = '<option value="" disabled selected>Select country</option>';
+  if (locations[continent]) {
+    locations[continent].forEach(country => {
+      const opt = document.createElement('option');
+      opt.value = country;
+      opt.textContent = country;
+      countrySelect.appendChild(opt);
+    });
+  }
+});
+
+ticketTypeSelect.addEventListener('change', () => {
+  const val = ticketTypeSelect.value;
+  if (val === 'continent') {
+    continentBox.style.display = 'block';
+    countryBox.style.display = 'none';
+  } else if (val === 'country') {
+    continentBox.style.display = 'block';
+    countryBox.style.display = 'block';
+  } else {
+    continentBox.style.display = 'none';
+    countryBox.style.display = 'none';
+  }
+});
+
+window.onload = () => {
+  populateContinents();
+  ticketTypeSelect.dispatchEvent(new Event('change'));
+};
+</script>
 
 </body>
 </html>
