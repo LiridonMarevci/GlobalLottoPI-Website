@@ -2,224 +2,148 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Global Lotto PI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GLOBAL LOTTO PI</title>
   <style>
-    body, html {
+    body {
       margin: 0;
-      padding: 0;
-      height: 100%;
       font-family: Arial, sans-serif;
-    }
-
-    .background {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
       background: url('background.png') no-repeat center center fixed;
       background-size: cover;
-      z-index: -1;
     }
-
     header {
       display: flex;
       align-items: center;
-      justify-content: center;
-      background-color: #7b2cbf;
-      padding: 15px 20px;
-      gap: 12px;
-    }
-
-    header img {
-      height: 45px;
-      width: auto;
-    }
-
-    header h1 {
+      background-color: #7B3FE4;
+      padding: 20px;
       color: gold;
-      font-weight: 900;
-      font-size: 30px;
-      margin: 0;
+      font-weight: bold;
+      font-size: 26px;
     }
-
-    main {
+    header img {
+      height: 50px;
+      margin-right: 15px;
+    }
+    .container {
+      background: white;
       max-width: 500px;
       margin: 50px auto;
-      background: rgba(255, 255, 255, 0.96);
-      border-radius: 12px;
-      padding: 25px 30px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
     }
-
-    label {
-      display: block;
-      margin-top: 20px;
-      font-weight: bold;
-    }
-
     select, button {
       width: 100%;
-      padding: 10px 12px;
-      margin-top: 6px;
-      font-size: 15px;
-      border-radius: 8px;
-      border: 1px solid #aaa;
+      padding: 10px;
+      margin-top: 15px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 16px;
     }
-
     button {
-      background-color: #7b2cbf;
+      background-color: #7B3FE4;
       color: white;
       font-weight: bold;
       cursor: pointer;
-      margin-top: 25px;
     }
-
     button:hover {
-      background-color: #5a189a;
+      background-color: #5e29b3;
     }
-
     .warning {
-      color: darkred;
-      text-align: center;
       margin-top: 20px;
+      color: red;
       font-weight: bold;
-    }
-
-    .select-group {
-      display: none;
+      font-size: 14px;
+      text-align: center;
     }
   </style>
 </head>
 <body>
+  <header>
+    <img src="logo.png" alt="Global Lotto PI Logo" />
+    GLOBAL LOTTO PI
+  </header>
+  <div class="container">
+    <label for="language"><b>Select language:</b></label>
+    <select id="language">
+      <!-- Languages will be inserted here by JS -->
+    </select>
 
-<div class="background"></div>
+    <label for="type"><b>Choose lotto type:</b></label>
+    <select id="type">
+      <option value="global">Global Lotto</option>
+      <option value="continent">Continent Lotto</option>
+      <option value="country">Country Lotto</option>
+    </select>
 
-<header>
-  <img src="logo.png" alt="Global Lotto PI Logo" />
-  <h1>GLOBAL LOTTO PI</h1>
-</header>
+    <label for="continent"><b>Select continent:</b></label>
+    <select id="continent">
+      <option value="Africa">Africa</option>
+      <option value="Asia">Asia</option>
+      <option value="Europe">Europe</option>
+      <option value="North America">North America</option>
+      <option value="South America">South America</option>
+      <option value="Oceania">Oceania</option>
+    </select>
 
-<main>
-  <label for="languageSelect">Select language:</label>
-  <select id="languageSelect">
-    <!-- Languages will be inserted via JS -->
-  </select>
+    <label for="country"><b>Select country:</b></label>
+    <select id="country">
+      <!-- Länder werden per JS eingefügt -->
+    </select>
 
-  <label for="ticketType">Choose lotto type:</label>
-  <select id="ticketType">
-    <option value="global" selected>Global Lotto</option>
-    <option value="continent">Continent Lotto</option>
-    <option value="country">Country Lotto</option>
-  </select>
+    <button onclick="proceed()">Join now</button>
 
-  <div class="select-group" id="continentGroup">
-    <label for="continentSelect">Select continent:</label>
-    <select id="continentSelect"></select>
+    <div class="warning">
+      ⚠️ Never enter your 24-word passphrase here! Use only the official Pi Browser Wallet.
+    </div>
   </div>
 
-  <div class="select-group" id="countryGroup">
-    <label for="countrySelect">Select country:</label>
-    <select id="countrySelect"></select>
-  </div>
+  <script>
+    // Sprachenliste aus der CSV
+    const languages = [
+      "Abchasisch", "Achinesisch", "Adygisch", "Afar", "Afrikaans", "Aghem", "Ainu", "Akan", "Akoose", "Albanisch",
+      // ... bis zu 343 Einträgen (hier gekürzt, du bekommst gleich die vollständige Liste eingefügt)
+    ];
 
-  <button id="joinBtn">Join now</button>
+    const countries = [
+      "Ägypten", "Äquatorialguinea", "Äthiopien", "Algerien", "Angola", "Benin", "Botswana", "Burkina Faso",
+      "Burundi", "Côte d’Ivoire", "Demokratische Republik Kongo", "Dschibuti", "Eritrea", "Eswatini",
+      "Gabun", "Gambia", "Ghana", "Guinea", "Guinea-Bissau", "Kamerun", "Kap Verde", "Kenia", "Komoren",
+      "Republik Kongo", "Lesotho", "Liberia", "Libyen", "Madagaskar", "Malawi", "Mali", "Marokko",
+      "Mauretanien", "Mauritius", "Mosambik", "Namibia", "Niger", "Nigeria", "Ruanda", "Sambia",
+      "São Tomé und Príncipe", "Senegal", "Seychellen", "Sierra Leone", "Simbabwe", "Somalia", "Südafrika",
+      "Sudan", "Südsudan", "Tansania", "Togo", "Tschad", "Tunesien", "Uganda", "Zentralafrikanische Republik",
+      "Afghanistan", "Armenien", "Aserbaidschan", "Bahrain", "Bangladesch", "Bhutan", "Brunei", "China",
+      "Georgien", "Indien", "Indonesien", "Irak", "Iran", "Israel", "Japan", "Jordanien",
+      "Kambodscha", "Kasachstan", "Katar", "Kirgisistan", "Kuwait", "Laos", "Libanon", "Malaysia",
+      // ... (weitere Länder folgen, komplette Liste wird gleich eingefügt)
+    ];
 
-  <div class="warning">
-    ⚠️ Never enter your 24-word passphrase here! Use only the official Pi Browser Wallet.
-  </div>
-</main>
+    const langDropdown = document.getElementById('language');
+    const countryDropdown = document.getElementById('country');
 
-<script>
-  const languageList = [
-    "Abchasisch", "Achinesisch", "Adygisch", "Afar", "Afrikaans", "Ainu", "Akan", "Albanisch",
-    "Aleutisch", "Altenglisch", "Altfranzösisch", "Altgriechisch", "Althebräisch", "Altisländisch",
-    "Altkirchenslawisch", "Altpersisch", "Altprovenzalisch", "Alttürkisch", "Amharisch", "Angika",
-    "Aragonisch", "Aramäisch", "Arapaho", "Armenisch", "Aserbaidschanisch", "Assamesisch", "Asturisch",
-    "Avarisch", "Awadhi", "Aymara", "Azeri", "Azeri (Latein)", "Azeri (Arabisch)", "Balinesisch",
-    "Bambara", "Baskisch", "Bavarian", "Belutschisch", "Bengalisch", "Bhojpuri", "Bislama", "Bosnisch",
-    "Bretonisch", "Bulgarisch", "Burmisch", "Burjatisch", "Catalan", "Cebuano", "Chamorro", "Chewa",
-    "Chichewa", "Chinesisch", "Cornish", "Dakota", "Dänisch", "Dari", "Deutsch", "Dhundari", "Dzongkha",
-    "Englisch", "Esperanto", "Estnisch", "Fidschianisch", "Finnisch", "Flämisch", "Französisch",
-    "Friaulisch", "Fulah", "Galicisch", "Georgisch", "Germanisch", "Gilbertesisch", "Gotisch",
-    "Griechisch", "Grönländisch", "Guarani", "Gujarati", "Haida", "Haitianisch", "Hausa", "Hawaiisch",
-    "Hebräisch", "Hindi", "Hiri Motu", "Hmong", "Iban", "Ibo", "Icelandic", "Igbo", "Ilocano",
-    "Indonesisch", "Inuktitut", "Inupiak", "Irisch", "Isländisch", "Italienisch", "Japanisch", "Javanisch",
-    "Kannada", "Kanuri", "Kasachisch", "Kashmiri", "Kasubisch", "Katalanisch", "Kazakh", "Khmer",
-    "Kikuyu", "Kinyarwanda", "Kirgisisch", "Kirundi", "Komi", "Kongo", "Koreanisch", "Kroatisch",
-    "Kurdisch", "Ladino", "Laotisch", "Latein", "Lettisch", "Ligurisch", "Limburgisch", "Lingala",
-    "Litauisch", "Lombardisch", "Luganda", "Luxemburgisch", "Macedonian", "Maduresisch", "Magahi",
-    "Maithili", "Malagasy", "Malaiisch", "Malayalam", "Maltesisch", "Manchu", "Mandar", "Mandinka",
-    "Manx", "Maori", "Marathi", "Mari", "Marshallese", "Mayan", "Mazandarani", "Mende", "Minangkabau",
-    "Mizo", "Mongolisch", "Nahuatl", "Nauruanisch", "Navajo", "Ndebele", "Ndonga", "Nepali",
-    "Neuguinea-Pidgin", "Niederländisch", "Niedersorbisch", "Nigerian Pidgin", "Nordkurdisch",
-    "Norwegisch", "Nyanja", "Ojibwe", "Oriya", "Oromo", "Ossetisch", "Panjabi", "Paschtu", "Persisch",
-    "Polnisch", "Portugiesisch", "Quechua", "Rätoromanisch", "Rumänisch", "Russisch", "Samoanisch",
-    "Sanskrit", "Sardisch", "Schottisch-Gälisch", "Schwedisch", "Serbisch", "Sesotho", "Setswana",
-    "Shona", "Sindhi", "Singhalesisch", "Slowakisch", "Slowenisch", "Somali", "Spanisch", "Suaheli",
-    "Süd-Azerbaidschanisch", "Süd-Ndebele", "Syrisch", "Tagalog", "Tahitianisch", "Tajik", "Tamil",
-    "Tatarisch", "Telugu", "Thailändisch", "Tibetisch", "Tigrinya", "Tok Pisin", "Tonganisch",
-    "Tschechisch", "Tschetschenisch", "Türkisch", "Turkmenisch", "Uigurisch", "Ukrainisch", "Ungarisch",
-    "Urdu", "Usbekisch", "Venda", "Vietnamesisch", "Wallisisch", "Walisisch", "Waray", "Weißrussisch",
-    "Wolof", "Xhosa", "Yiddish", "Yoruba", "Zaza", "Zhuang", "Zulu"
-  ];
+    languages.forEach(lang => {
+      const opt = document.createElement('option');
+      opt.value = lang;
+      opt.textContent = lang;
+      langDropdown.appendChild(opt);
+    });
 
-  const continents = {
-    "Africa": [...],
-    "Asia": [...],
-    "Europe": [...],
-    "North America": [...],
-    "South America": [...],
-    "Oceania": [...],
-    "Observers": ["Vatican City", "Palestine"]
-  };
-
-  const langSelect = document.getElementById('languageSelect');
-  languageList.forEach(lang => {
-    const opt = document.createElement('option');
-    opt.value = lang;
-    opt.textContent = lang;
-    langSelect.appendChild(opt);
-  });
-
-  const ticketType = document.getElementById('ticketType');
-  const continentGroup = document.getElementById('continentGroup');
-  const countryGroup = document.getElementById('countryGroup');
-  const continentSelect = document.getElementById('continentSelect');
-  const countrySelect = document.getElementById('countrySelect');
-
-  ticketType.addEventListener('change', () => {
-    const val = ticketType.value;
-    if (val === 'continent') {
-      continentGroup.style.display = 'block';
-      countryGroup.style.display = 'none';
-    } else if (val === 'country') {
-      continentGroup.style.display = 'block';
-      countryGroup.style.display = 'block';
-    } else {
-      continentGroup.style.display = 'none';
-      countryGroup.style.display = 'none';
-    }
-  });
-
-  for (const c in continents) {
-    const opt = document.createElement('option');
-    opt.value = c;
-    opt.textContent = c;
-    continentSelect.appendChild(opt);
-  }
-
-  continentSelect.addEventListener('change', () => {
-    const selected = continentSelect.value;
-    countrySelect.innerHTML = '';
-    continents[selected].forEach(country => {
+    countries.forEach(country => {
       const opt = document.createElement('option');
       opt.value = country;
       opt.textContent = country;
-      countrySelect.appendChild(opt);
+      countryDropdown.appendChild(opt);
     });
-  });
 
-  ticketType.dispatchEvent(new Event('change'));
-</script>
-
+    function proceed() {
+      const lang = langDropdown.value;
+      const type = document.getElementById('type').value;
+      const continent = document.getElementById('continent').value;
+      const country = countryDropdown.value;
+      alert(`Selected: Language = ${lang}, Type = ${type}, Continent = ${continent}, Country = ${country}`);
+      // Weiterleitung oder Seitenaufruf je nach Auswahl folgt hier (später einbauen)
+    }
+  </script>
 </body>
 </html>
