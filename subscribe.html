@@ -1,126 +1,106 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Subscribe - Global Lotto PI</title>
-  <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+  <title>Global Lotto PI – Subscribe</title>
   <style>
     body {
       margin: 0;
       padding: 0;
-      font-family: Arial, sans-serif;
-      background: url('background.png') no-repeat center center fixed;
+      background-image: url('background.png');
       background-size: cover;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      color: white;
+      font-family: Arial, sans-serif;
     }
-
     .container {
-      background-color: rgba(0, 0, 0, 0.75);
-      padding: 40px;
-      border-radius: 20px;
-      text-align: center;
-      box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
-      width: 320px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.5);
     }
-
-    .container h1 {
+    .logo {
       margin-bottom: 20px;
-      color: gold;
     }
-
+    .subscription-box {
+      background-color: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+    .subscription-box h2 {
+      margin-bottom: 20px;
+      color: #4b0082;
+    }
     select, button {
+      padding: 10px;
+      margin: 10px 0;
       width: 100%;
-      padding: 12px;
-      margin-top: 15px;
-      font-size: 16px;
-      border-radius: 5px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #b47aff;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
       border: none;
     }
-
-    button {
-      background-color: #9c27b0;
-      color: white;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
     button:hover {
-      background-color: #ba68c8;
-    }
-
-    .logo {
-      width: 100px;
-      margin-bottom: 20px;
+      background-color: #8e2de2;
     }
   </style>
+  <script src="https://sdk.minepi.com/pi-sdk.js"></script>
 </head>
 <body>
   <div class="container">
-    <img src="logo.png" alt="Logo" class="logo">
-    <h1>Choose your Subscription</h1>
-    <select id="subscription">
-      <option value="trial">Trial 14 Days – 1 Pi (once)</option>
-      <option value="1month">1 Month – 10 Pi</option>
-      <option value="6months">6 Months – 55 Pi</option>
-      <option value="1year">1 Year – 100 Pi</option>
-    </select>
-    <button onclick="startPayment()">Subscribe Now</button>
+    <img class="logo" src="logo.png" alt="Logo" height="100" />
+    <div class="subscription-box">
+      <h2>Subscription</h2>
+      <select id="subscription">
+        <option value="trial">Trial – 0.001 Pi (Sandbox)</option>
+        <option value="1month">1 Month – 10 Pi</option>
+        <option value="6months">6 Months – 55 Pi</option>
+        <option value="1year">1 Year – 100 Pi</option>
+      </select>
+      <button onclick="startPayment()">Subscribe Now</button>
+    </div>
   </div>
 
   <script>
-    // Init Pi SDK (only once)
-    const apiKey = "evaxkebjaahfmvosdiqgdgnrfh45gafpu6enrqitjz5qmtpkz11faiqcdvijq0sc";
-    const walletAddress = "GA43JVACMR2FM77IGK6AJ4F62SFSEFQCOKIHZ7NDCSQPXHLYJW7IMPDQ";
-
-    const subscriptionOptions = {
-      trial: { amount: 1, memo: "Trial 14 days" },
-      "1month": { amount: 10, memo: "1 Month Subscription" },
-      "6months": { amount: 55, memo: "6 Months Subscription" },
-      "1year": { amount: 100, memo: "1 Year Subscription" }
-    };
-
     async function startPayment() {
-      const selected = document.getElementById("subscription").value;
-      const subscription = subscriptionOptions[selected];
+      const amounts = {
+        trial: "0.001",
+        "1month": "10",
+        "6months": "55",
+        "1year": "100"
+      };
+      const selected = document.getElementById('subscription').value;
+      const amount = amounts[selected];
 
-      if (!subscription) {
-        alert("Invalid subscription selection.");
-        return;
-      }
-
-      // Load SDK and initialize
       if (!window.Pi) {
-        alert("⚠️ Pi SDK not loaded. Please open in Pi Browser.");
+        alert("Pi SDK not loaded.");
         return;
       }
 
-      try {
-        Pi.init({
-          version: "2.0",
-          sandbox: true,
-          apiKey: apiKey
-        });
+      Pi.init({
+        version: "2.0",
+        sandbox: true
+      });
 
-        const paymentData = {
-          amount: subscription.amount.toString(),
-          memo: subscription.memo,
-          metadata: { type: selected },
-          to: walletAddress
-        };
-
-        const payment = await Pi.createPayment(paymentData);
-
-        alert("✅ Payment successful!\nThank you for subscribing to Global Lotto PI.");
-        // TODO: Optionally send data to server here
-      } catch (error) {
-        console.error("Payment Error:", error);
+      Pi.createPayment({
+        amount: amount,
+        memo: `Subscription for ${selected}`,
+        metadata: { subscriptionType: selected },
+        to: "GA43JVACMR2FM77IGK6AJ4F62SFSEFQCOKIHZ7NDCSQPXHLYJW7IMPDQ"
+      }).then(function(payment) {
+        alert("✅ Payment successful! Thank you for your subscription.");
+      }).catch(function(error) {
         alert("❌ Payment failed or cancelled.");
-      }
+        console.error(error);
+      });
     }
   </script>
 </body>
