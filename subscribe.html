@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script src="https://sdk.minepi.com/pi-sdk.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Subscribe - Global Lotto PI</title>
+
+  <!-- ✅ Pi SDK -->
   <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+
   <style>
     body {
       background-image: url('background.png');
@@ -19,6 +21,7 @@
       justify-content: center;
       align-items: center;
     }
+
     .subscription-box {
       background-color: rgba(0, 0, 0, 0.75);
       padding: 30px;
@@ -27,6 +30,7 @@
       width: 320px;
       box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
     }
+
     select, button {
       width: 100%;
       font-size: 16px;
@@ -35,20 +39,24 @@
       border-radius: 5px;
       border: none;
     }
+
     button {
       background-color: #9c27b0;
       color: white;
       cursor: pointer;
     }
+
     button:hover {
       background-color: #ba68c8;
     }
+
     h2 {
       color: #ffc107;
     }
   </style>
 </head>
 <body>
+
   <div class="subscription-box">
     <h2>Choose your Subscription</h2>
     <select id="subscription">
@@ -61,77 +69,44 @@
   </div>
 
   <script>
-    // Init SDK
-    Pi.init({ version: "2.0", sandbox: true });
-
     const apiKey = "evaxkebjaahfmvosdiqgdgnrfh45gafpu6enrqitjz5qmtpkz11faiqcdvijq0sc";
     const receiver = "GA43JVACMR2FM77IGK6AJ4F62SFSEFQCOKIHZ7NDCSQPXHLYJW7IMPDQ";
 
     const amounts = {
-      trial: { amount: 1, memo: "Trial 14 days" },
-      1month: { amount: 10, memo: "1 Month Subscription" },
-      6months: { amount: 55, memo: "6 Months Subscription" },
-      1year: { amount: 100, memo: "1 Year Subscription" }
+      trial: { amount: "1", memo: "Trial 14 days" },
+      1month: { amount: "10", memo: "1 Month Subscription" },
+      6months: { amount: "55", memo: "6 Months Subscription" },
+      1year: { amount: "100", memo: "1 Year Subscription" }
     };
 
     async function startPayment() {
       const selected = document.getElementById("subscription").value;
-      const payment = amounts[selected];
-      if (!payment) return alert("Invalid selection.");
+      const data = amounts[selected];
 
-      Pi.createPayment(payment, {
-        amount: payment.amount,
-        memo: payment.memo,
+      if (!window.Pi) {
+        alert("❌ Pi SDK not loaded");
+        return;
+      }
+
+      Pi.init({
+        version: "2.0",
+        sandbox: true,
+        apiKey: apiKey
+      });
+
+      Pi.createPayment({
+        amount: data.amount,
+        memo: data.memo,
         metadata: { type: selected },
         to: receiver
-      })
-      .then(function(paymentResult) {
-        console.log("Payment result:", paymentResult);
-        alert("✅ Payment successful!");
-      })
-      .catch(function(error) {
-        console.error("Payment failed:", error);
-        alert("❌ Payment failed: " + error.message);
+      }).then(function (payment) {
+        alert("✅ Payment successful!\nThank you for your subscription.");
+        console.log(payment);
+      }).catch(function (error) {
+        alert("❌ Payment failed or cancelled.");
+        console.error(error);
       });
     }
   </script>
-<script>
-  async function startPayment() {
-    const amounts = {
-      trial: "1",
-      "1month": "10",
-      "6months": "55",
-      "1year": "100"
-    };
-
-    const selected = document.getElementById('subscription').value;
-    const amount = amounts[selected];
-
-    if (!window.Pi) {
-      alert("Pi SDK not loaded");
-      return;
-    }
-
-    Pi.init({
-      version: "2.0",
-      sandbox: true,
-      apiKey: "evaxkebjaahfmvosdiqgdgnrfh45gafpu6enrqitjz5qmtpkz11faiqcdvijq0sc"
-    });
-
-    Pi.createPayment({
-      amount: amount,
-      memo: `Subscription for ${selected}`,
-      metadata: { type: selected },
-      to: "GA43JVACMR2FM77IGK6AJ4F62SFSEFQCOKIHZ7NDCSQPXHLYJW7IMPDQ"
-    }).then(function (payment) {
-      alert("✅ Payment successful!\nThank you for your subscription.");
-      // Später: Hier Abo-Daten speichern oder Zugriff freischalten
-    }).catch(function (error) {
-      alert("❌ Payment failed or cancelled.");
-      console.error(error);
-    });
-  }
-</script>
-
 </body>
 </html>
