@@ -18,7 +18,6 @@
       justify-content: center;
       align-items: center;
     }
-
     .subscription-box {
       background-color: rgba(0, 0, 0, 0.75);
       padding: 30px;
@@ -27,46 +26,30 @@
       width: 320px;
       box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
     }
-
-    h1 {
-      font-size: 24px;
-      margin-bottom: 20px;
-      color: gold;
-    }
-
-    select {
-      padding: 10px;
-      margin-top: 10px;
+    select, button {
       width: 100%;
       font-size: 16px;
+      padding: 10px;
+      margin-top: 15px;
+      border-radius: 5px;
+      border: none;
     }
-
     button {
-      margin-top: 20px;
-      padding: 12px;
-      font-size: 16px;
       background-color: #9c27b0;
       color: white;
-      border: none;
-      border-radius: 5px;
       cursor: pointer;
-      width: 100%;
     }
-
     button:hover {
       background-color: #ba68c8;
     }
-
-    .status {
-      margin-top: 15px;
-      font-size: 14px;
-      color: lightgreen;
+    h2 {
+      color: #ffc107;
     }
   </style>
 </head>
 <body>
   <div class="subscription-box">
-    <h1>Choose your Subscription</h1>
+    <h2>Choose your Subscription</h2>
     <select id="subscription">
       <option value="trial">Trial 14 Days – 1 Pi (once)</option>
       <option value="1month">1 Month – 10 Pi</option>
@@ -74,54 +57,41 @@
       <option value="1year">1 Year – 100 Pi</option>
     </select>
     <button onclick="startPayment()">Subscribe Now</button>
-    <div class="status" id="status"></div>
   </div>
 
   <script>
-    Pi.init({
-      version: "2.0",
-      sandbox: true,
-      apiKey: "evaxkebjaahfmvosdiqgdgnrfh45gafpu6enrqitjz5qmtpkz11faiqcdvijq0sc"
-    });
+    // Init SDK
+    Pi.init({ version: "2.0", sandbox: true });
 
-    function startPayment() {
+    const apiKey = "evaxkebjaahfmvosdiqgdgnrfh45gafpu6enrqitjz5qmtpkz11faiqcdvijq0sc";
+    const receiver = "GA43JVACMR2FM77IGK6AJ4F62SFSEFQCOKIHZ7NDCSQPXHLYJW7IMPDQ";
+
+    const amounts = {
+      trial: { amount: 1, memo: "Trial 14 days" },
+      1month: { amount: 10, memo: "1 Month Subscription" },
+      6months: { amount: 55, memo: "6 Months Subscription" },
+      1year: { amount: 100, memo: "1 Year Subscription" }
+    };
+
+    async function startPayment() {
       const selected = document.getElementById("subscription").value;
-      let amount = 0;
-      let memo = "";
+      const payment = amounts[selected];
+      if (!payment) return alert("Invalid selection.");
 
-      if (selected === "trial") {
-        amount = 1;
-        memo = "Trial 14 Days";
-      } else if (selected === "1month") {
-        amount = 10;
-        memo = "Subscription 1 Month";
-      } else if (selected === "6months") {
-        amount = 55;
-        memo = "Subscription 6 Months";
-      } else if (selected === "1year") {
-        amount = 100;
-        memo = "Subscription 1 Year";
-      }
-
-      const paymentData = {
-        amount: amount,
-        memo: memo,
-        metadata: { subscription: selected },
-        to: "GA43JVACMR2FM77IGK6AJ4F62SFSEFQCOKIHZ7NDCSQPXHLYJW7IMPDQ"
-      };
-
-      Pi.createPayment(paymentData)
-        .then((payment) => {
-          document.getElementById("status").innerText = "⏳ Waiting for user confirmation...";
-          return payment.complete();
-        })
-        .then(() => {
-          document.getElementById("status").innerText = "✅ Subscription successful! Thank you.";
-        })
-        .catch((error) => {
-          document.getElementById("status").innerText = "❌ Payment failed or cancelled.";
-          console.error(error);
-        });
+      Pi.createPayment(payment, {
+        amount: payment.amount,
+        memo: payment.memo,
+        metadata: { type: selected },
+        to: receiver
+      })
+      .then(function(paymentResult) {
+        console.log("Payment result:", paymentResult);
+        alert("✅ Payment successful!");
+      })
+      .catch(function(error) {
+        console.error("Payment failed:", error);
+        alert("❌ Payment failed: " + error.message);
+      });
     }
   </script>
 </body>
