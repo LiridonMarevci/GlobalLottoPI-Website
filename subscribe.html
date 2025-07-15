@@ -131,7 +131,7 @@
         });
 
         payment.onReadyForServerCompletion(async (paymentId, txid) => {
-          const response = await fetch("http://192.168.0.75:5000/approve", {
+          const baseURL = "https://globallottopi-website.onrender.com";
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ paymentId: paymentId, txid: txid })
