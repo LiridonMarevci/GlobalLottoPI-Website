@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GlobalLottoPI Payment Test</title>
+  <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+</head>
+<body style="font-family: sans-serif; text-align: center; padding: 50px;">
+
+  <h1>🔒 GlobalLottoPI Payment Test</h1>
+  <p>Please log in with your Pi account and send a test payment of 0.01 π to verify the app integration.</p>
+
+  <button id="loginBtn">🔑 Login with Pi</button><br><br>
+  <button id="payBtn" disabled>💰 Pay 0.01 π</button>
+
+  <script>
+    const appId = "GlobalLottoPI"; // Deine App-ID
+    let userAccessToken = null;
+
+    document.getElementById("loginBtn").onclick = async () => {
+      try {
+        const scopes = ['payments'];
+        Pi.init({ version: "2.0", sandbox: false });
+        Pi.authenticate(scopes, onIncompletePaymentFound).then(auth => {
+          userAccessToken = auth.accessToken;
+          alert("✅ Login successful!");
+          document.getElementById("payBtn").disabled = false;
+        }).catch(err => {
+          console.error(err);
+          alert("❌ Login failed.");
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    function onIncompletePaymentFound(payment) {
+      console.log("⚠️ Incomplete payment found:", payment);
+    }
+
+    document.getElementById("payBtn").onclick = async () => {
+      Pi.createPayment({
+        amount: 0.01,
+        memo: "Test transaction for Mainnet verification",
+        metadata: { type: "test", purpose: "mainnet-verification" },
+      }, {
+        onReadyForServerApproval: (paymentId) => {
+          alert("✅ Payment ready. PaymentID: " + paymentId);
+          // Hier würdest du normal deinen Server informieren – nicht nötig für diesen Test.
+        },
+        onReadyForServerCompletion: (paymentId, txid) => {
+          alert("🎉 Payment complete! Transaction ID: " + txid);
+        },
+        onCancel: (paymentId) => {
+          alert("❌ Payment was canceled.");
+        },
+        onError: (error, paymentId) => {
+          console.error("Payment error:", error);
+          alert("❌ Payment error: " + error);
+        }
+      });
+    };
+  </script>
+</body>
+</html>
