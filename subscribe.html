@@ -1,107 +1,110 @@
 
+<!-- START OF FULL HTML PAGE -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Global Lotto PI – Subscribe</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Global Lotto PI Subscription</title>
+  <script src="https://sdk.minepi.com/pi-sdk.js"></script>
   <style>
     body {
       margin: 0;
-      padding: 0;
-      background-image: url('background.png');
-      background-size: cover;
       font-family: Arial, sans-serif;
+      background: url('background.png') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #fff;
     }
     .container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      background-color: rgba(0, 0, 0, 0.5);
-    }
-    .logo {
-      margin-bottom: 20px;
-    }
-    .subscription-box {
-      background-color: white;
+      background-color: rgba(0, 0, 0, 0.85);
       padding: 30px;
       border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      box-shadow: 0 0 20px gold;
       text-align: center;
-    }
-    .subscription-box h2 {
-      margin-bottom: 20px;
-      color: #4b0082;
+      max-width: 400px;
+      width: 100%;
     }
     select, button {
       padding: 10px;
-      margin: 10px 0;
+      font-size: 16px;
+      margin-top: 15px;
       width: 100%;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
-    button {
-      background-color: #b47aff;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
+      border-radius: 8px;
       border: none;
     }
+    button {
+      background-color: #8c52ff;
+      color: white;
+      cursor: pointer;
+    }
     button:hover {
-      background-color: #8e2de2;
+      background-color: #a770ff;
     }
   </style>
-  <script src="https://sdk.minepi.com/pi-sdk.js"></script>
 </head>
 <body>
   <div class="container">
-    <img class="logo" src="logo.png" alt="Logo" height="100" />
-    <div class="subscription-box">
-      <h2>Subscription</h2>
-      <select id="subscription">
-        <option value="trial">Trial – 0.001 Pi (Sandbox)</option>
-        <option value="1month">1 Month – 10 Pi</option>
-        <option value="6months">6 Months – 55 Pi</option>
-        <option value="1year">1 Year – 100 Pi</option>
-      </select>
-      <button onclick="startPayment()">Subscribe Now</button>
-    </div>
+    <img src="logo.png" width="120" alt="Logo">
+    <h2>Subscription</h2>
+    <select id="subscriptionOption">
+      <option value="0.001">Trial – 0.001 Pi (Sandbox)</option>
+      <option value="10">1 Month – 10 Pi</option>
+      <option value="55">6 Months – 55 Pi</option>
+      <option value="100">1 Year – 100 Pi</option>
+    </select>
+    <button onclick="subscribe()">Subscribe Now</button>
+    <p id="status" style="margin-top: 20px;"></p>
   </div>
 
   <script>
-    async function startPayment() {
-      const amounts = {
-        trial: "0.001",
-        "1month": "10",
-        "6months": "55",
-        "1year": "100"
-      };
-      const selected = document.getElementById('subscription').value;
-      const amount = amounts[selected];
+    const appPublicKey = "GA43JVACMR2FM77IGK6AJ4F62SFSEFQCOKIHZ7NDCSQPXHLYJW7IMPDQ";
+    const apiKey = "evaxkebjaahfmvosdiqgdgnrfh45gafpu6enrqitjz5qmtpkz11faiqcdvijq0sc";
 
-      if (!window.Pi) {
-        alert("Pi SDK not loaded.");
-        return;
+    async function subscribe() {
+      const selectedValue = document.getElementById("subscriptionOption").value;
+      const statusText = document.getElementById("status");
+      statusText.textContent = "Initializing Pi Network...";
+
+      try {
+        Pi.init({ version: "2.0", sandbox: true });
+
+        const paymentData = {
+          amount: selectedValue,
+          memo: `GlobalLottoPI Subscription ${selectedValue} Pi`,
+          metadata: { type: "subscription", duration: selectedValue },
+          to: appPublicKey
+        };
+
+        const callbacks = {
+          onReadyForServerApproval: (paymentId) => {
+            console.log("Ready for server approval: ", paymentId);
+            statusText.textContent = "Waiting for server approval...";
+          },
+          onReadyForServerCompletion: (paymentId, txid) => {
+            console.log("Ready for server completion: ", paymentId, txid);
+            statusText.textContent = "Payment approved and completed!";
+          },
+          onCancel: (paymentId) => {
+            console.warn("User cancelled the payment!", paymentId);
+            statusText.textContent = "Payment cancelled.";
+          },
+          onError: (error, paymentId) => {
+            console.error("Payment error", error);
+            statusText.textContent = "An error occurred during payment.";
+          }
+        };
+
+        Pi.createPayment(paymentData, callbacks);
+      } catch (error) {
+        console.error("Pi Network Init Error:", error);
+        statusText.textContent = "Could not initialize Pi Network.";
       }
-
-      Pi.init({
-        version: "2.0",
-        sandbox: true
-      });
-
-      Pi.createPayment({
-        amount: amount,
-        memo: `Subscription for ${selected}`,
-        metadata: { subscriptionType: selected },
-        to: "GA43JVACMR2FM77IGK6AJ4F62SFSEFQCOKIHZ7NDCSQPXHLYJW7IMPDQ"
-      }).then(function(payment) {
-        alert("✅ Payment successful! Thank you for your subscription.");
-      }).catch(function(error) {
-        alert("❌ Payment failed or cancelled.");
-        console.error(error);
-      });
     }
   </script>
 </body>
 </html>
+<!-- END OF FULL HTML PAGE -->
