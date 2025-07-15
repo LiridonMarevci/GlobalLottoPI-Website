@@ -1,0 +1,22 @@
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+
+app = Flask(__name__)
+CORS(app)  # Lejon kërkesat nga frontend-i
+
+@app.route("/approve", methods=["POST"])
+def approve():
+    data = request.get_json()
+    print("🟡 [APPROVE] PaymentId:", data.get("paymentId"))
+    return jsonify({"success": True})
+
+@app.route("/complete", methods=["POST"])
+def complete():
+    data = request.get_json()
+    print("✅ [COMPLETE] PaymentId:", data.get("paymentId"), "TxID:", data.get("txid"))
+    return jsonify({"success": True})
+
+@app.route("/")
+def home():
+    return "✅ Backend i GlobalLottoPI është aktiv!"
+Add backend server.py
