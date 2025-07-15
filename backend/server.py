@@ -19,4 +19,3 @@ def complete():
 @app.route("/")
 def home():
     return "✅ Backend i GlobalLottoPI është aktiv!"
-Add backend server.py
