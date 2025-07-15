@@ -59,14 +59,79 @@
   </style>
 </head>
 <body>
-  <div class="subscription-box">
-    <h2>Subscription</h2>
-    <select id="plan">
-      <option value="trial">Trial – 0.001 Pi (Sandbox)</option>
-    </select>
-    <button onclick="subscribeNow()">Subscribe Now</button>
-    <div id="status"></div>
-  </div>
+<div>
+  <h2>Subscription</h2>
+  <select id="subscriptionOption">
+    <option value="trial">Trial – 0.001 Pi (Sandbox)</option>
+    <option value="1month">1 Month – 10 Pi</option>
+    <option value="6months">6 Months – 55 Pi</option>
+    <option value="1year">1 Year – 100 Pi</option>
+  </select>
+  <button onclick="subscribeNOW()">Subscribe Now</button>
+  <div id="status" style="margin-top: 10px; color: white;"></div>
+</div>
+<!-- Pi SDK -->
+<script src="https://sdk.minepi.com/pi-sdk.js"></script>
+
+<script>
+  let payment;
+
+  document.addEventListener("DOMContentLoaded", () => {
+    if (typeof window.Pi === "undefined") {
+      document.getElementById("status").innerText = "❌ Nuk je brenda Pi Browser.";
+      return;
+    }
+
+    try {
+      Pi.init({
+        version: "2.0",
+        sandbox: true,
+        apikey: "uxwsgwplum5d897ls7xyvqc9bcztsch6hcrzu8lvtkvr0gp6ogc3baqjpv0lslhr"
+      });
+
+      document.getElementById("status").innerText = "✅ Pi SDK u inicializua me sukses.";
+      console.log("✅ Pi SDK initialized.");
+    } catch (err) {
+      console.error("❌ Pi SDK init error:", err);
+      document.getElementById("status").innerText = "❌ Nuk u inicializua Pi Network.";
+    }
+  });
+
+  // Funksioni i pagesës
+  async function subscribeNOW() {
+    document.getElementById("status").innerText = "🟡 Po fillon pagesa...";
+
+    try {
+      const selected = document.getElementById("subscriptionOption").value;
+      let amount = 0.001;
+      let memo = "Trial Subscription";
+
+      if (selected === "1month") {
+        amount = 10;
+        memo = "1-Month Subscription";
+      } else if (selected === "6months") {
+        amount = 55;
+        memo = "6-Months Subscription";
+      } else if (selected === "1year") {
+        amount = 100;
+        memo = "1-Year Subscription";
+      }
+
+      const paymentData = {
+        amount: amount.toString(),
+        memo: memo,
+        metadata: { type: "subscription", duration: selected }
+      };
+
+      payment = await Pi.createPayment(paymentData);
+      document.getElementById("status").innerText = "✅ U hap Pi Wallet për pagesë.";
+    } catch (err) {
+      console.error("❌ Gabim gjatë pagesës:", err);
+      document.getElementById("status").innerText = "❌ Pagesa dështoi.";
+    }
+  }
+</script>
+
 
   <script>
     let payment;
