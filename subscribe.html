@@ -2,138 +2,127 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <title>Global Lotto PI – Subscribe</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Subscription | Global Lotto Pi</title>
+  <meta name="pi-browser" content="true">
+
+  <!-- Pi Network SDK – i domosdoshëm për pagesa -->
   <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+
+  <!-- Stilizimi bazik -->
   <style>
     body {
-      margin: 0;
+      background-color: #2c0043;
       font-family: Arial, sans-serif;
-      background: url('background.png') no-repeat center center fixed;
-      background-size: cover;
       color: white;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100vh;
+      margin: 0;
     }
-
-    .container {
-      background-color: rgba(0, 0, 0, 0.8);
+    .subscription-box {
+      background: #000000b0;
       padding: 30px;
-      border-radius: 15px;
+      border-radius: 20px;
       text-align: center;
-      box-shadow: 0 0 15px gold;
+      box-shadow: 0 0 20px gold;
     }
-
-    img.logo {
-      width: 100px;
-      margin-bottom: 20px;
-    }
-
     h2 {
       margin-bottom: 20px;
       color: gold;
     }
-
     select, button {
       padding: 10px;
-      margin-top: 10px;
-      font-size: 16px;
-      border-radius: 10px;
+      border-radius: 8px;
       border: none;
+      font-size: 16px;
+      margin-top: 10px;
       width: 100%;
     }
-
     button {
-      background-color: #a020f0;
+      background-color: #b300ff;
       color: white;
+      font-weight: bold;
+      margin-top: 20px;
       cursor: pointer;
-      margin-top: 20px;
     }
-
     button:hover {
-      background-color: #8a2be2;
+      background-color: #a000e0;
     }
-
-    .footer {
-      margin-top: 20px;
-      font-size: 12px;
-      color: #ccc;
-    }
-
-    @media (max-width: 600px) {
-      .container {
-        width: 90%;
-        padding: 20px;
-      }
+    #status {
+      margin-top: 15px;
+      font-size: 14px;
+      color: gold;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <img src="logo.png" class="logo" alt="Global Lotto PI Logo">
+  <div class="subscription-box">
     <h2>Subscription</h2>
-    <select id="subscription">
+    <select id="plan">
       <option value="trial">Trial – 0.001 Pi (Sandbox)</option>
-      <option value="1month">1 Month – 10 Pi</option>
-      <option value="6months">6 Months – 55 Pi</option>
-      <option value="1year">1 Year – 100 Pi</option>
     </select>
-    <button onclick="startPayment()">Subscribe Now</button>
-    <div id="status" style="margin-top:15px; color: orange;"></div>
-    <div class="footer">Only payments from Pi Browser will work properly.</div>
+    <button onclick="subscribeNow()">Subscribe Now</button>
+    <div id="status"></div>
   </div>
 
   <script>
-    const API_KEY = "uxwsgwplum5d897ls7xyvqc9bcztsch6hcrzu8lvtkvr0gp6ogc3baqjpv0lslhr";
-    const WALLET_ADDRESS = "GA43JVACMR2FM77IGK6AJ4F62SFSEFQCOKIHZ7NDCSQPXHLYJW7IMPDQ";
+    let payment;
 
-    window.onload = function () {
-      if (window.Pi) {
+    // Inicimi i Pi SDK
+    document.addEventListener("DOMContentLoaded", () => {
+      try {
         Pi.init({
           version: "2.0",
-          sandbox: true,
-          apiKey: API_KEY
+          sandbox: true // false për Mainnet
         });
-        document.getElementById("status").innerText = "✅ Pi Network initialized.";
-      } else {
-        document.getElementById("status").innerText = "❌ Could not initialize Pi Network.";
+        console.log("✅ Pi SDK initialized");
+      } catch (err) {
+        console.error("❌ Pi SDK init error:", err);
+        document.getElementById("status").innerText = "Could not initialize Pi Network.";
       }
-    };
+    });
 
-    async function startPayment() {
-      if (!window.Pi) {
-        alert("Pi Network SDK not loaded!");
-        return;
-      }
-
-      const amountMap = {
-        "trial": "0.001",
-        "1month": "10",
-        "6months": "55",
-        "1year": "100"
-      };
-
-      const selected = document.getElementById("subscription").value;
-      const amount = amountMap[selected];
-
+    // Funksioni për pagesë
+    async function subscribeNow() {
       try {
-        const payment = await Pi.createPayment({
-          amount: amount,
-          memo: "Subscription: " + selected,
-          metadata: { subscription: selected },
-          to: WALLET_ADDRESS
+        document.getElementById("status").innerText = "⏳ Initiating payment...";
+
+        payment = await Pi.createPayment({
+          amount: 0.001,
+          memo: "Trial Subscription",
+          metadata: { type: "trial", duration: "14 days" },
+          to: "GA43JVACMR2FM77IGK6AJ4F62SFSEFQCOKIHZ7NDCSQPXHLYJW7IMPDQ"
         });
 
-        alert("✅ Payment successful!");
-        console.log("Payment completed:", payment);
-        document.getElementById("status").innerText = "✅ Payment completed.";
-      } catch (error) {
-        alert("❌ Payment failed or cancelled.");
-        console.error("Payment error:", error);
-        document.getElementById("status").innerText = "❌ Payment error.";
+        payment.onReadyForServerApproval(paymentId => {
+          console.log("🟡 Ready for server approval:", paymentId);
+          document.getElementById("status").innerText = "Awaiting server approval...";
+        });
+
+        payment.onReadyForServerCompletion((paymentId, txid) => {
+          console.log("✅ Payment completed:", paymentId, txid);
+          document.getElementById("status").innerText = "🎉 Subscription successful!";
+          setTimeout(() => {
+            window.location.href = "index.html"; // ose faqja tjetër
+          }, 2000);
+        });
+
+        payment.onCancel(() => {
+          console.warn("⚠️ Payment cancelled by user.");
+          document.getElementById("status").innerText = "Payment cancelled.";
+        });
+
+        payment.onError(error => {
+          console.error("❌ Payment error:", error);
+          document.getElementById("status").innerText = "Payment failed or an error occurred.";
+        });
+
+      } catch (err) {
+        console.error("❌ Could not create payment:", err);
+        document.getElementById("status").innerText = "Failed to initiate payment.";
       }
     }
   </script>
