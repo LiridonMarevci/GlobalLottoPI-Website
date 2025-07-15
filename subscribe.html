@@ -111,22 +111,58 @@
           to: "GA43JVACMR2FM77IGK6AJ4F62SFSEFQCOKIHZ7NDCSQPXHLYJW7IMPDQ"
         });
 
-        payment.onReadyForServerApproval(paymentId => {
-          console.log("🟡 Ready for approval:", paymentId);
-          document.getElementById("status").innerText = "🟡 Gati për aprovimin e serverit...";
-        });
+        payment.onReadyForServerApproval(async (paymentId) => {
+  const response = await fetch("http://192.168.0.75:5000/approve", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ paymentId: paymentId })
+  });
 
-        payment.onReadyForServerCompletion((paymentId, txid) => {
-          console.log("✅ Completed:", paymentId, txid);
-          document.getElementById("status").innerText = "✅ Pagesa u përfundua!";
-          setTimeout(() => {
-            window.location.href = "index.html";
-          }, 2000);
-        });
+  if (!response.ok) {
+    document.getElementById("status").innerText = "❌ Miratimi i serverit dështoi.";
+    return;
+  }
 
-        payment.onCancel(() => {
-          document.getElementById("status").innerText = "❌ Pagesa u anullua.";
-        });
+  document.getElementById("status").innerText = "🟢 Miratim i serverit u krye.";
+});
+
+        payment.onReadyForServerApproval(async (paymentId) => {
+  const response = await fetch("http://192.168.0.75:5000/approve", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ paymentId: paymentId })
+  });
+
+  if (!response.ok) {
+    document.getElementById("status").innerText = "❌ Miratimi i serverit dështoi.";
+    return;
+  }
+
+  document.getElementById("status").innerText = "🟢 Miratim i serverit u krye.";
+});
+
+payment.onReadyForServerCompletion(async (paymentId, txid) => {
+  const response = await fetch("http://192.168.0.75:5000/complete", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ paymentId: paymentId, txid: txid })
+  });
+
+  if (!response.ok) {
+    document.getElementById("status").innerText = "❌ Finalizimi dështoi.";
+    return;
+  }
+
+  document.getElementById("status").innerText = "✅ Pagesa përfundoi me sukses!";
+  setTimeout(() => {
+    window.location.href = "index.html";
+  }, 2000);
+});
+
+payment.onCancel(() => {
+  document.getElementById("status").innerText = "❌ Pagesa u anullua.";
+});
+
 
         payment.onError(error => {
           console.error("❌ Error:", error);
