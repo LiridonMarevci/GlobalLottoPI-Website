@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script src="https://sdk.minepi.com/pi-sdk.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Subscribe - Global Lotto PI</title>
@@ -94,5 +95,43 @@
       });
     }
   </script>
+<script>
+  async function startPayment() {
+    const amounts = {
+      trial: "1",
+      "1month": "10",
+      "6months": "55",
+      "1year": "100"
+    };
+
+    const selected = document.getElementById('subscription').value;
+    const amount = amounts[selected];
+
+    if (!window.Pi) {
+      alert("Pi SDK not loaded");
+      return;
+    }
+
+    Pi.init({
+      version: "2.0",
+      sandbox: true,
+      apiKey: "evaxkebjaahfmvosdiqgdgnrfh45gafpu6enrqitjz5qmtpkz11faiqcdvijq0sc"
+    });
+
+    Pi.createPayment({
+      amount: amount,
+      memo: `Subscription for ${selected}`,
+      metadata: { type: selected },
+      to: "GA43JVACMR2FM77IGK6AJ4F62SFSEFQCOKIHZ7NDCSQPXHLYJW7IMPDQ"
+    }).then(function (payment) {
+      alert("✅ Payment successful!\nThank you for your subscription.");
+      // Später: Hier Abo-Daten speichern oder Zugriff freischalten
+    }).catch(function (error) {
+      alert("❌ Payment failed or cancelled.");
+      console.error(error);
+    });
+  }
+</script>
+
 </body>
 </html>
