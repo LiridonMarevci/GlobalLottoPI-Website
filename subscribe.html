@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Subscribe - Global Lotto PI</title>
+  <style>
+    body {
+      background-image: url('background.png');
+      background-size: cover;
+      background-position: center;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: white;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .subscription-box {
+      background-color: rgba(0, 0, 0, 0.75);
+      padding: 30px;
+      border-radius: 15px;
+      text-align: center;
+      width: 300px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+    }
+
+    select {
+      padding: 10px;
+      margin-top: 15px;
+      width: 100%;
+      font-size: 16px;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #9c27b0;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #ba68c8;
+    }
+  </style>
+</head>
+<body>
+  <div class="subscription-box">
+    <label for="subscription">Select your subscription:</label><br/>
+    <select id="subscription">
+      <option value="trial">Trial 14 Days – 1 Pi (One-time)</option>
+      <option value="1month">1 Month – 10 Pi</option>
+      <option value="6months">6 Months – 55 Pi</option>
+      <option value="1year">1 Year – 100 Pi</option>
+    </select>
+    <button onclick="startPayment()">Subscribe Now</button>
+  </div>
+
+  <script>
+    function startPayment() {
+      const selected = document.getElementById('subscription').value;
+      alert("Simulated payment start for: " + selected);
+      // Hier kommt dein echter Pi SDK Code später rein
+    }
+  </script>
+</body>
+</html>
