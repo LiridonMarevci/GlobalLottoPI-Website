@@ -5,11 +5,7 @@
   <title>Global Lotto PI – Subscribe</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="pi-browser" content="true">
-
-  <!-- Pi Network SDK – i domosdoshëm për pagesa -->
   <script src="https://sdk.minepi.com/pi-sdk.js"></script>
-
-  <!-- Stilizimi bazik -->
   <style>
     body {
       background-color: #2c0043;
@@ -29,10 +25,7 @@
       text-align: center;
       box-shadow: 0 0 20px gold;
     }
-    h2 {
-      margin-bottom: 20px;
-      color: gold;
-    }
+    h2 { margin-bottom: 20px; color: gold; }
     select, button {
       padding: 10px;
       border-radius: 8px;
@@ -48,9 +41,7 @@
       margin-top: 20px;
       cursor: pointer;
     }
-    button:hover {
-      background-color: #a000e0;
-    }
+    button:hover { background-color: #a000e0; }
     #status {
       margin-top: 15px;
       font-size: 14px;
@@ -59,136 +50,92 @@
   </style>
 </head>
 <body>
-<div>
-  <h2>Subscription</h2>
-  <select id="subscriptionOption">
-    <option value="trial">Trial – 0.001 Pi (Sandbox)</option>
-    <option value="1month">1 Month – 10 Pi</option>
-    <option value="6months">6 Months – 55 Pi</option>
-    <option value="1year">1 Year – 100 Pi</option>
-  </select>
-  <button onclick="subscribeNOW()">Subscribe Now</button>
-  <div id="status" style="margin-top: 10px; color: white;"></div>
-</div>
-<!-- Pi SDK -->
-<script src="https://sdk.minepi.com/pi-sdk.js"></script>
-
-<script>
-  let payment;
-
-  document.addEventListener("DOMContentLoaded", () => {
-    if (typeof window.Pi === "undefined") {
-      document.getElementById("status").innerText = "❌ Nuk je brenda Pi Browser.";
-      return;
-    }
-
-    try {
-      Pi.init({
-        version: "2.0",
-        sandbox: true,
-        apikey: "uxwsgwplum5d897ls7xyvqc9bcztsch6hcrzu8lvtkvr0gp6ogc3baqjpv0lslhr"
-      });
-
-      document.getElementById("status").innerText = "✅ Pi SDK u inicializua me sukses.";
-      console.log("✅ Pi SDK initialized.");
-    } catch (err) {
-      console.error("❌ Pi SDK init error:", err);
-      document.getElementById("status").innerText = "❌ Nuk u inicializua Pi Network.";
-    }
-  });
-
-  // Funksioni i pagesës
-  async function subscribeNOW() {
-    document.getElementById("status").innerText = "🟡 Po fillon pagesa...";
-
-    try {
-      const selected = document.getElementById("subscriptionOption").value;
-      let amount = 0.001;
-      let memo = "Trial Subscription";
-
-      if (selected === "1month") {
-        amount = 10;
-        memo = "1-Month Subscription";
-      } else if (selected === "6months") {
-        amount = 55;
-        memo = "6-Months Subscription";
-      } else if (selected === "1year") {
-        amount = 100;
-        memo = "1-Year Subscription";
-      }
-
-      const paymentData = {
-        amount: amount.toString(),
-        memo: memo,
-        metadata: { type: "subscription", duration: selected }
-      };
-
-      payment = await Pi.createPayment(paymentData);
-      document.getElementById("status").innerText = "✅ U hap Pi Wallet për pagesë.";
-    } catch (err) {
-      console.error("❌ Gabim gjatë pagesës:", err);
-      document.getElementById("status").innerText = "❌ Pagesa dështoi.";
-    }
-  }
-</script>
-
+  <div class="subscription-box">
+    <h2>Subscription</h2>
+    <select id="subscriptionOption">
+      <option value="trial">Trial – 0.001 Pi (Sandbox)</option>
+      <option value="1month">1 Month – 10 Pi</option>
+      <option value="6months">6 Months – 55 Pi</option>
+      <option value="1year">1 Year – 100 Pi</option>
+    </select>
+    <button onclick="subscribeNOW()">Subscribe Now</button>
+    <div id="status"></div>
+  </div>
 
   <script>
     let payment;
 
-    // Inicimi i Pi SDK
     document.addEventListener("DOMContentLoaded", () => {
+      if (typeof window.Pi === "undefined") {
+        document.getElementById("status").innerText = "❌ Nuk je brenda Pi Browser.";
+        return;
+      }
+
       try {
         Pi.init({
           version: "2.0",
-          sandbox: true // 
-          apiKey: "evaxkebjaahfmvosdiqgdgnrfh45gafpu6enrqitjz5qmtpkz11faiqcdvijq0sc"
+          sandbox: true,
+          apiKey: "uxwsgwplum5d897ls7xyvqc9bcztsch6hcrzu8lvtkvr0gp6ogc3baqjpv0lslhr"
         });
         console.log("✅ Pi SDK initialized");
+        document.getElementById("status").innerText = "✅ Pi SDK është gati.";
       } catch (err) {
-        console.error("❌ Pi SDK init error:", err);
-        document.getElementById("status").innerText = "Could not initialize Pi Network.";
+        console.error("❌ Pi.init error:", err);
+        document.getElementById("status").innerText = "❌ SDK nuk u inicializua.";
       }
     });
 
-    // Funksioni për pagesë
-    async function subscribeNow() {
+    async function subscribeNOW() {
+      const selected = document.getElementById("subscriptionOption").value;
+      let amount = "0.001";
+      let memo = "Trial Subscription";
+
+      if (selected === "1month") {
+        amount = "10";
+        memo = "1-Month Subscription";
+      } else if (selected === "6months") {
+        amount = "55";
+        memo = "6-Months Subscription";
+      } else if (selected === "1year") {
+        amount = "100";
+        memo = "1-Year Subscription";
+      }
+
       try {
-        document.getElementById("status").innerText = "⏳ Initiating payment...";
+        document.getElementById("status").innerText = "⏳ Po hapet Pi Wallet...";
 
         payment = await Pi.createPayment({
-          amount: 0.001,
-          memo: "Trial Subscription",
-          metadata: { type: "trial", duration: "14 days" },
+          amount: amount,
+          memo: memo,
+          metadata: { type: "subscription", plan: selected },
           to: "GA43JVACMR2FM77IGK6AJ4F62SFSEFQCOKIHZ7NDCSQPXHLYJW7IMPDQ"
         });
 
         payment.onReadyForServerApproval(paymentId => {
-          console.log("🟡 Ready for server approval:", paymentId);
-          document.getElementById("status").innerText = "Awaiting server approval...";
+          console.log("🟡 Ready for approval:", paymentId);
+          document.getElementById("status").innerText = "🟡 Gati për aprovimin e serverit...";
         });
 
         payment.onReadyForServerCompletion((paymentId, txid) => {
-          console.log("✅ Payment completed:", paymentId, txid);
-          document.getElementById("status").innerText = "🎉 Subscription successful!";
+          console.log("✅ Completed:", paymentId, txid);
+          document.getElementById("status").innerText = "✅ Pagesa u përfundua!";
           setTimeout(() => {
-            window.location.href = "index.html"; // ose faqja tjetër
+            window.location.href = "index.html";
           }, 2000);
         });
 
         payment.onCancel(() => {
-          console.warn("⚠️ Payment cancelled by user.");
-          document.getElementById("status").innerText = "Payment cancelled.";
+          document.getElementById("status").innerText = "❌ Pagesa u anullua.";
         });
 
         payment.onError(error => {
-          console.error("❌ Payment error:", error);
-          document.getElementById("status").innerText = "Payment failed or an error occurred.";
+          console.error("❌ Error:", error);
+          document.getElementById("status").innerText = "❌ Gabim gjatë pagesës.";
         });
 
       } catch (err) {
-        console.error("❌ Could not create payment:", err);
-        document.getElementById("status").innerText = "Failed to initiate payment.";
+        console.error("❌ Payment failed:", err);
+        document.getElementById("status").innerText = "❌ Pagesa dështoi.";
       }
     }
   </script>
