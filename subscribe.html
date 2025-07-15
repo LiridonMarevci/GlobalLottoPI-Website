@@ -53,7 +53,7 @@
   <div class="subscription-box">
     <h2>Subscription</h2>
     <select id="subscriptionOption">
-      <option value="trial">Trial – 1 Pi (Sandbox)</option>
+      <option value="trial">Trial – 0.01 Pi (Sandbox)</option>
       <option value="1month">1 Month – 10 Pi</option>
       <option value="6months">6 Months – 55 Pi</option>
       <option value="1year">1 Year – 100 Pi</option>
@@ -75,7 +75,7 @@
         Pi.init({
           version: "2.0",
           sandbox: true,
-          apiKey: "uxwsgwplum5d897ls7xyvqc9bcztsch6hcrzu8lvtkvr0gp6ogc3baqjpv0lslhr"
+          apiKey: "pj6uvoarkvwah30jzpref2g7unatykmgecqewfiddsxz1ugl31kkyovwgbrpociv"
         });
 
         const scopes = ['payments'];
@@ -91,7 +91,7 @@
 
     async function subscribeNOW() {
       const selected = document.getElementById("subscriptionOption").value;
-      let amount = "1";
+      let amount = "0.01";
       let memo = "Trial Subscription";
 
       if (selected === "1month") {
