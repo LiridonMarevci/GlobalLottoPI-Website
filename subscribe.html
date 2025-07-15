@@ -1,11 +1,9 @@
-
-<!-- START OF FULL HTML PAGE -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Global Lotto PI Subscription</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subscription | Global Lotto Pi</title>
   <script src="https://sdk.minepi.com/pi-sdk.js"></script>
   <style>
     body {
@@ -13,98 +11,131 @@
       font-family: Arial, sans-serif;
       background: url('background.png') no-repeat center center fixed;
       background-size: cover;
+      color: white;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
+      justify-content: center;
       height: 100vh;
-      color: #fff;
     }
+
     .container {
-      background-color: rgba(0, 0, 0, 0.85);
+      background-color: rgba(0, 0, 0, 0.8);
       padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 0 20px gold;
+      border-radius: 15px;
       text-align: center;
-      max-width: 400px;
-      width: 100%;
+      box-shadow: 0 0 15px gold;
     }
+
+    img.logo {
+      width: 100px;
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: gold;
+    }
+
     select, button {
       padding: 10px;
+      margin-top: 10px;
       font-size: 16px;
-      margin-top: 15px;
-      width: 100%;
-      border-radius: 8px;
+      border-radius: 10px;
       border: none;
+      width: 100%;
     }
+
     button {
-      background-color: #8c52ff;
+      background-color: #a020f0;
       color: white;
       cursor: pointer;
+      margin-top: 20px;
     }
+
     button:hover {
-      background-color: #a770ff;
+      background-color: #8a2be2;
+    }
+
+    .footer {
+      margin-top: 20px;
+      font-size: 12px;
+      color: #ccc;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        width: 90%;
+        padding: 20px;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <img src="logo.png" width="120" alt="Logo">
+    <img src="logo.png" class="logo" alt="Global Lotto PI Logo">
     <h2>Subscription</h2>
-    <select id="subscriptionOption">
-      <option value="0.001">Trial – 0.001 Pi (Sandbox)</option>
-      <option value="10">1 Month – 10 Pi</option>
-      <option value="55">6 Months – 55 Pi</option>
-      <option value="100">1 Year – 100 Pi</option>
+    <select id="subscription">
+      <option value="trial">Trial – 0.001 Pi (Sandbox)</option>
+      <option value="1month">1 Month – 10 Pi</option>
+      <option value="6months">6 Months – 55 Pi</option>
+      <option value="1year">1 Year – 100 Pi</option>
     </select>
-    <button onclick="subscribe()">Subscribe Now</button>
-    <p id="status" style="margin-top: 20px;"></p>
+    <button onclick="startPayment()">Subscribe Now</button>
+    <div id="status" style="margin-top:15px; color: orange;"></div>
+    <div class="footer">Only payments from Pi Browser will work properly.</div>
   </div>
 
   <script>
-    const appPublicKey = "GA43JVACMR2FM77IGK6AJ4F62SFSEFQCOKIHZ7NDCSQPXHLYJW7IMPDQ";
-    const apiKey = "evaxkebjaahfmvosdiqgdgnrfh45gafpu6enrqitjz5qmtpkz11faiqcdvijq0sc";
+    const API_KEY = "uxwsgwplum5d897ls7xyvqc9bcztsch6hcrzu8lvtkvr0gp6ogc3baqjpv0lslhr";
+    const WALLET_ADDRESS = "GA43JVACMR2FM77IGK6AJ4F62SFSEFQCOKIHZ7NDCSQPXHLYJW7IMPDQ";
 
-    async function subscribe() {
-      const selectedValue = document.getElementById("subscriptionOption").value;
-      const statusText = document.getElementById("status");
-      statusText.textContent = "Initializing Pi Network...";
+    window.onload = function () {
+      if (window.Pi) {
+        Pi.init({
+          version: "2.0",
+          sandbox: true,
+          apiKey: API_KEY
+        });
+        document.getElementById("status").innerText = "✅ Pi Network initialized.";
+      } else {
+        document.getElementById("status").innerText = "❌ Could not initialize Pi Network.";
+      }
+    };
+
+    async function startPayment() {
+      if (!window.Pi) {
+        alert("Pi Network SDK not loaded!");
+        return;
+      }
+
+      const amountMap = {
+        "trial": "0.001",
+        "1month": "10",
+        "6months": "55",
+        "1year": "100"
+      };
+
+      const selected = document.getElementById("subscription").value;
+      const amount = amountMap[selected];
 
       try {
-        Pi.init({ version: "2.0", sandbox: true });
+        const payment = await Pi.createPayment({
+          amount: amount,
+          memo: "Subscription: " + selected,
+          metadata: { subscription: selected },
+          to: WALLET_ADDRESS
+        });
 
-        const paymentData = {
-          amount: selectedValue,
-          memo: `GlobalLottoPI Subscription ${selectedValue} Pi`,
-          metadata: { type: "subscription", duration: selectedValue },
-          to: appPublicKey
-        };
-
-        const callbacks = {
-          onReadyForServerApproval: (paymentId) => {
-            console.log("Ready for server approval: ", paymentId);
-            statusText.textContent = "Waiting for server approval...";
-          },
-          onReadyForServerCompletion: (paymentId, txid) => {
-            console.log("Ready for server completion: ", paymentId, txid);
-            statusText.textContent = "Payment approved and completed!";
-          },
-          onCancel: (paymentId) => {
-            console.warn("User cancelled the payment!", paymentId);
-            statusText.textContent = "Payment cancelled.";
-          },
-          onError: (error, paymentId) => {
-            console.error("Payment error", error);
-            statusText.textContent = "An error occurred during payment.";
-          }
-        };
-
-        Pi.createPayment(paymentData, callbacks);
+        alert("✅ Payment successful!");
+        console.log("Payment completed:", payment);
+        document.getElementById("status").innerText = "✅ Payment completed.";
       } catch (error) {
-        console.error("Pi Network Init Error:", error);
-        statusText.textContent = "Could not initialize Pi Network.";
+        alert("❌ Payment failed or cancelled.");
+        console.error("Payment error:", error);
+        document.getElementById("status").innerText = "❌ Payment error.";
       }
     }
   </script>
 </body>
 </html>
-<!-- END OF FULL HTML PAGE -->
