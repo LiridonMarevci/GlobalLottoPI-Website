@@ -24,94 +24,105 @@
       padding: 30px;
       border-radius: 15px;
       text-align: center;
-      width: 300px;
+      width: 320px;
       box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
     }
 
-    select, button {
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: gold;
+    }
+
+    select {
       padding: 10px;
-      margin-top: 15px;
+      margin-top: 10px;
       width: 100%;
       font-size: 16px;
     }
 
     button {
+      margin-top: 20px;
+      padding: 12px;
+      font-size: 16px;
       background-color: #9c27b0;
       color: white;
       border: none;
       border-radius: 5px;
       cursor: pointer;
+      width: 100%;
     }
 
     button:hover {
       background-color: #ba68c8;
     }
+
+    .status {
+      margin-top: 15px;
+      font-size: 14px;
+      color: lightgreen;
+    }
   </style>
 </head>
 <body>
   <div class="subscription-box">
-    <label for="subscription">Select your subscription:</label><br/>
+    <h1>Choose your Subscription</h1>
     <select id="subscription">
-      <option value="trial">Trial 14 Days – 1 Pi (One-time)</option>
+      <option value="trial">Trial 14 Days – 1 Pi (once)</option>
       <option value="1month">1 Month – 10 Pi</option>
       <option value="6months">6 Months – 55 Pi</option>
       <option value="1year">1 Year – 100 Pi</option>
     </select>
     <button onclick="startPayment()">Subscribe Now</button>
+    <div class="status" id="status"></div>
   </div>
 
   <script>
     Pi.init({
       version: "2.0",
-      sandbox: true
+      sandbox: true,
+      apiKey: "evaxkebjaahfmvosdiqgdgnrfh45gafpu6enrqitjz5qmtpkz11faiqcdvijq0sc"
     });
 
-    async function startPayment() {
-      const subscription = document.getElementById('subscription').value;
+    function startPayment() {
+      const selected = document.getElementById("subscription").value;
       let amount = 0;
       let memo = "";
 
-      switch(subscription) {
-        case "trial": amount = 1; memo = "Trial 14 Days"; break;
-        case "1month": amount = 10; memo = "Subscription 1 Month"; break;
-        case "6months": amount = 55; memo = "Subscription 6 Months"; break;
-        case "1year": amount = 100; memo = "Subscription 1 Year"; break;
+      if (selected === "trial") {
+        amount = 1;
+        memo = "Trial 14 Days";
+      } else if (selected === "1month") {
+        amount = 10;
+        memo = "Subscription 1 Month";
+      } else if (selected === "6months") {
+        amount = 55;
+        memo = "Subscription 6 Months";
+      } else if (selected === "1year") {
+        amount = 100;
+        memo = "Subscription 1 Year";
       }
 
-      Pi.createPayment({
-        amount: amount.toString(),
+      const paymentData = {
+        amount: amount,
         memo: memo,
-        metadata: { type: subscription },
+        metadata: { subscription: selected },
         to: "GA43JVACMR2FM77IGK6AJ4F62SFSEFQCOKIHZ7NDCSQPXHLYJW7IMPDQ"
-      }, {
-        onReadyForServerApproval: function(paymentId) {
-          console.log("Payment ready:", paymentId);
-          // später: Send paymentId to backend
-        },
-        onReadyForServerCompletion: function(paymentId, txid) {
-          console.log("Payment completed:", txid);
-          alert("Payment successful! You are now subscribed.");
-          // redirect to game page
-        },
-        onCancel: function(paymentId) {
-          alert("Payment was cancelled.");
-        },
-        onError: function(error, payment) {
-          console.error("Payment error:", error);
-          alert("Payment failed. Try again.");
-        }
-      });
-    }
+      };
 
-    Pi.authenticate(
-      { onIncompletePaymentFound: function(payment) { console.log("Unfinished:", payment); } },
-      function(auth) {
-        console.log("Authenticated:", auth.user.uid);
-      },
-      function(error) {
-        console.error("Auth error:", error);
-      }
-    );
+      Pi.createPayment(paymentData)
+        .then((payment) => {
+          document.getElementById("status").innerText = "⏳ Waiting for user confirmation...";
+          return payment.complete();
+        })
+        .then(() => {
+          document.getElementById("status").innerText = "✅ Subscription successful! Thank you.";
+        })
+        .catch((error) => {
+          document.getElementById("status").innerText = "❌ Payment failed or cancelled.";
+          console.error(error);
+        });
+    }
   </script>
 </body>
 </html>
